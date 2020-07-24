@@ -1,0 +1,87 @@
+<!-- 
+    1. html由一系列元素(Element)构成，元素由开始标签、结束标签、内容、属性(Attribute)构成
+    2. 元素之间可以嵌套
+    3. 元素分为：块级元素、内联元素、内联块级元素
+        块级元素：单独占一行，能够设置行宽高等属性
+        内联元素：和其他元素在一行，不能设置行宽高，元素的宽度就是它包含的文字或图片的宽度，不可改变。
+        内联块级元素：和其他元素都在一行上；元素的高度、宽度、行高以及顶和底边距都可设置
+
+-->
+
+<!-- 
+    特殊符号：
+    <   &lt;
+    >   &gt;
+    "   &quot;
+
+
+-->
+
+
+<!-- DOCTYPE : 链接一些HTML编写守则 -->
+<!DOCTYPE html> 
+<!-- 根元素 -->
+<html lang="en-US">     <!-- 设置文档语言 -->
+    <!-- 头部元素，对用户不可见，包含一些元数据 -->
+    <head>
+        <!-- meta：为文档添加元数据(描述性数据)，包含多组 属性/值 对，没有内容部分 -->
+        <meta charset="utf-8">
+        <meta name="auth" content="learn">
+        <!-- description 字段内容会被显示在搜索引擎结果中 -->
+        <meta name="description" content="The MDN Learning Area aims to provide complete beginners to the Web with all they need to know to get started with developing web sites and applications.">
+
+
+
+
+        <title>&lt;title&gt;测试页面</title>
+    </head>
+    <!-- 用户可见内容 -->
+    <body>
+
+        <h1>主标题</h1>
+        <h2>顶层标题</h2>
+        <h3>子标题</h3>
+        <h4>次子标题</h4>
+
+        <!-- 段落 -->
+        <!-- span : 用来分离行内元素，设置特殊的参数 -->
+        <p>Japanese example: <span lang="jp">ご飯が熱い。</span></p>
+        <!-- style : 同时设置多组参数 -->
+        <span style="font-size: 32px; margin: 21px 0;">这是顶级标题吗？</span>
+        <p style="display: block;">我的猫咪<strong>爆</strong>脾气</p>
+
+
+        <p>Mozilla 是一个全球社区，这里聚集着来自五湖四海的</p>
+    
+        <!-- 无序列表 unordered list -->
+        <ul> 
+            <li>技术人员</li>
+            <li>思考者</li>
+            <li>建造者</li>
+        </ul>
+
+        <!-- 有序列表 ordered list -->
+        <ol> 
+            <li>技术人员</li>
+            <li>思考者</li>
+            <li>建造者</li>
+        </ol>
+
+
+
+        <!-- 常用文本标记元素 
+            em : 斜体
+            strong : 加粗
+        
+        -->
+        <p>I am <em>glad</em> you weren't <em>late</em>.</p>    
+        <p>This liquid is <strong>highly toxic</strong>.</p>
+        <p>if you drink it, <strong>you may <em>die</em></strong>.</p>
+
+        <!-- 链接，href属性指定具体的URL -->
+        <a href="https://www.mozilla.org/zh-CN/about/manifesto/">Mozilla 宣言</a>
+
+        <!-- img元素的两个必要属性：src：图片URL路径，绝对/相对路径    alt：图片不可见时显示的替代文本内容 -->
+        <img src="images/firefox-icon.png" alt="测试图片">
+    </body>
+</html>

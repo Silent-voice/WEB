@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <!-- 图片 -->
+        <section>
+            <!-- 
+            1. 尽量使用相对路径，绝对路径会促使浏览器做更多的工作，比如DNS请求等
+            2. alt : 备选文本，图片无法显示时展示
+            3. 一般不建议在html中设置图片宽高
+            4. title : 鼠标悬停时显示内容
+            5. css图片与html中图片的区别
+                css中的图片一般作为背景图展示，没有alt/title这些字段帮助浏览器实现辅助功能
+
+            -->
+            <img src="images/dinosaur.jpg"
+                alt="The head and torso of a dinosaur skeleton; it has a large head with long sharp teeth"
+                width="400" height="341"
+                title="A T-Rex on display in the Manchester University Museum"
+            >
+    
+
+            <!-- figure : 官方的图片元素，可以包含多个图片，使用 figcaption 对图片进行说明 -->
+            <figure>
+                <img src="https://raw.githubusercontent.com/mdn/learning-area/master/html/multimedia-and-embedding/images-in-html/dinosaur_small.jpg"
+                    alt="一只恐龙头部和躯干的骨架，它有一个巨大的头，长着锋利的牙齿。"
+                    width="200"
+                    height="171">
+                <figcaption>曼彻斯特大学博物馆展出的一只霸王龙的化石</figcaption>
+            </figure>
+
+
+            <!-- 
+                位图 : 位图使用像素网格来定义，包含了每个像素的位置和它的色彩信息，BMP、PNG、JPEG、GIF
+                矢量图 : 包含了图形和路径的定义，电脑可以根据这些定义计算出当它们在屏幕上渲染时应该呈现的样子，SVG
+
+                位图放大会模糊，矢量图不会
+
+            -->
+            <img src="images/star.png" alt="triangle with equal sides" srcset="images/star.svg">
+
+
+
+            <!-- 
+                自适应图片
+                srcset : 定义了允许浏览器选择的图像集，以及每个图像的大小
+                sizes : 定义了一系列媒体条件，当某个条件为真时，指明什么样的图片尺寸是最佳选择，浏览器会从srcset中选择最接近的图像
+            -->
+            <img srcset="images/elva-fairy-320w.jpg 320w,
+                    images/elva-fairy-480w.jpg 480w,
+                    images/elva-fairy-800w.jpg 800w"
+                sizes="(max-width: 320px) 280px,
+                    (max-width: 480px) 440px,
+                    800px"
+                src="images/elva-fairy-800w.jpg" alt="Elva dressed as a fairy">
+
+
+        </section>
+
+        <!-- 视频-->
+        <section>
+            <!-- 
+                video : 支持文档内的视频播放的元素
+                    src : 视频URL
+                    controls : 使用浏览器提供的默认控件界面，提供用户视频控制功能
+            -->
+
+            <video src="images/rabbit320.webm" controls>
+                <p>你的浏览器不支持 HTML5 视频。可点击<a href="images/rabbit320.mp4">此链接</a>观看</p>
+            </video>
+
+            <!-- 
+                source : 设置多种不同格式的视频，以适应不同的浏览器
+                    type : 指定视频格式，能够帮助浏览器快速过滤不支持格式文件
+            -->
+            <video controls>
+                <source src="images/rabbit320.mp4" type="video/mp4">
+                <source src="images/rabbit320.webm" type="video/webm">
+                <p>你的浏览器不支持 HTML5 视频。可点击<a href="rabbit320.mp4">此链接</a>观看</p>
+            </video>
+
+            <!-- 
+                width，height : 不会改变原视频纵横比，多余部分用空白填充
+                autoplay : 自动播放，不推荐
+                loop : 循环播放，不推荐
+                muted : 视频播放时默认无声音
+                poster : 指向了一个图像的URL，在视频播放前显示
+                preload : 缓冲较大的文件，有3个值可选：
+                    "none" ：不缓冲
+                    "auto" ：页面加载后缓存媒体文件
+                    "metadata" ：仅缓冲文件的元数据
+
+            -->
+            <video controls width="400" height="400" autoplay loop muted poster="images/poster.png">
+                <source src="images/rabbit320.mp4" type="video/mp4">
+                <source src="images/rabbit320.webm" type="video/webm">
+                <p>你的浏览器不支持 HTML5 视频。可点击<a href="images/rabbit320.mp4">此链接</a>观看</p>
+            </video>
+
+
+            <!-- 
+                track : 添加字幕
+                    kind : 指明字幕类型
+                    srclang : 指明字幕语言
+            -->
+            <video controls>
+                <source src="images/rabbit320.mp4" type="video/mp4">
+                <source src="images/rabbit320.webm" type="video/webm">
+                <track label="English" kind="subtitles" srclang="en" src="images/vtt/en.vtt" default>
+                <track label="Deutsch" kind="subtitles" srclang="de" src="images/vtt/de.vtt">
+                <track label="Español" kind="subtitles" srclang="es" src="images/vtt/es.vtt">
+            </video>
+
+        </section>
+
+
+
+        <!-- 音频 -->
+        <section>
+            <!-- 
+                audio与video功能类似，但没有视觉部件，不支持width、height、poster
+
+            -->
+            <audio controls>
+                <source src="images/viper.mp3" type="audio/mp3">
+                <source src="images/viper.ogg" type="audio/ogg">
+                <p>你的浏览器不支持 HTML5 音频，可点击<a href="images/viper.mp3">此链接</a>收听。</p>
+            </audio>
+
+
+
+        </section>
+        
+
+    </body>
+</html>

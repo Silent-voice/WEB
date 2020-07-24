@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        
+        <!-- 
+            href : 具体的链接，可以是网站、文件或者任何网络上的内容
+            title : 链接的补充有用信息，当鼠标指针悬停在链接上时显示
+
+        -->
+
+        <p>I'm creating a link to
+            <a 
+                href="https://www.mozilla.org/en-US/" 
+                title="The best place to find more information about Mozilla's mission and how to contribute">
+                the Mozilla homepage
+            </a>
+        .</p>
+
+        <!-- 被链接内容也可以是块级元素 -->
+        <a href="https://www.mozilla.org/en-US/">
+            <img src="images/favicon.ico" alt="mozilla logo that links to the mozilla homepage">
+        </a>
+
+
+        <!-- #element_id : 跳转到本文档中指定片段
+            dst.html#element_id : 跳转到指定文档中指定片段
+        -->
+        <p>The <a href="#Mailing_address">company mailing address</a> can be found at the bottom of this page.</p>
+
+        <h2 id="Mailing_address"></h2>
+
+        <address>52 Business street<br>
+        Very important town<br>
+        Commerce city<br>
+        CA, 999654</address>
+
+
+        <!-- download : 设置默认的保存文件名，只能用于同源URL，即URL和本文件具有相同协议、网址、端口才会起作用 -->
+        <a href="https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+            download="firefox-latest-64bit-installer.exe">
+            Download Latest Firefox for Windows (64-bit) (English, US)
+        </a>
+
+
+
+        <!--邮件URL 
+            mailto:收件人(可选)？邮件字段：值&邮件字段：值
+            值必须是URL编码
+        -->
+        <a href="mailto:nowhere@mozilla.org?cc=name2@rapidtables.com&bcc=name3@rapidtables.com&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email">
+            Send mail with cc, bcc, subject and body
+        </a>
+
+
+    </body>
+</html>

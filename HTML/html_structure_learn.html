@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>二次元俱乐部</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Sonsie+One" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=ZCOOL+KuaiLe" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+    </head>
+
+    <!-- 
+        内容分区元素
+            header : 页眉，用于展示介绍性内容
+            footer : 页脚
+            nav : 导航栏
+            main : 存放每个页面独有的内容，每个页面上只能用一次 <main>，且直接位于 <body> 中。
+                article : 独立的一篇文档
+                section : 文档中独立的部分
+                aside : 一个和其余页面内容几乎无关的部分
+
+
+        无语义元素
+            span : 内联的无语义元素
+            div : 块级无语义元素
+
+    -->
+
+    <body>
+        <header> <!-- 本站所有网页的统一主标题 -->
+            <h1>聆听电子天籁之音</h1>
+        </header>
+
+        <nav> <!-- 本站统一的导航栏 -->
+            <ul>
+                <li><a href="#">主页</a></li>
+                <!-- 共n个导航栏项目，省略…… -->
+            </ul>
+
+            <form> <!-- 搜索栏是站点内导航的一个非线性的方式。 -->
+                <input type="search" name="q" placeholder="要搜索的内容">
+                <input type="submit" value="搜索">
+            </form>
+        </nav>
+
+        <main> <!-- 网页主体内容 -->
+            <!-- 
+                <br> : 段落内换行
+                <hr> : 在文档中生成一条水平分割线
+            -->
+            <article>
+                <p>从前有个人叫小高<br>
+                    他说写 HTML 感觉最好<br>
+                    但他写的代码结构语义一团糟<br>
+                    他写的标签谁也懂不了。
+                </p>
+                
+                <p>原来这唐僧是个慈悯的圣僧。</p>
+                <hr>
+                <p>却说那妖精，脱命升空。</p>
+
+
+            </article>
+            
+            <aside> <!-- 侧边栏在主内容右侧 -->
+                <h2>相关链接</h2>
+                <ul>
+                    <li><a href="#">这是一个超链接</a></li>
+                    <!-- 侧边栏有n个超链接，略略略…… -->
+                </ul>
+            </aside>
+        </main>
+
+        <footer> <!-- 本站所有网页的统一页脚 -->
+            <p>© 2050 某某保留所有权利</p>
+        </footer>
+    </body>
+</html>

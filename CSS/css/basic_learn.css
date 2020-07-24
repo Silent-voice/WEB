@@ -1,0 +1,120 @@
+/* 
+    CSS : Cascading Style Sheets 层叠样式表
+        1. 用来指定文档如何展示给用户的一门语言
+        2. CSS由众多模块组成，每个模块提供不同的功能
+        3. CSS通过一堆规则定义文档的样式，规则语法：
+            选择器, 选择器 {
+                属性 : 值;      声明
+                属性 : 值;
+            }
+        4. 元素的属性具有继承关系，能够继承父元素中的设置值，可以分为默认继承属性(color)和默认非继承属性(width、margins、padding、borders) 
+        5. 规则优先级：同一个元素被多个规则命中时
+            4.1 资源顺序 : 相同情况下，后面的规则会覆盖前面的规则
+            4.2 优先级 : 越具体的选择器规则优先级越高
+                内联样式 > id选择器规则 > 类选择器规则 > 元素选择器规则
+            4.3 在属性值后面加上 !important ，可以强制使得该属性值的优先级最高，多个!important则会按照原来的规则计算优先级。
+                eg : border: none !important;
+            
+
+    CSS规则的应用
+        1. 外部样式表 : 在HTML中通过 <link rel="stylesheet" href="css/basic_learn.css" type="text/css"> 调用
+        2. 内部样式表 : 将CSS规则写在HTML文件的 <style></style> 元素内
+        3. 内联样式 : 将CSS规则写在具体元素的style属性中 
+
+
+*/
+
+h1 {
+    color: red;
+}
+
+p, li {
+    color: green;
+}
+
+
+li {
+    list-style-type: none;  /*  取消自带的项目符合 */
+}
+
+
+/* 所有class为special的元素 */
+.special {
+    color: orange;
+}
+
+/*  li元素中class为special的元素*/
+li.special {
+    font-weight: bold;
+}
+
+/* 在li元素内部的em元素 */
+li em {
+    color: red;
+}
+
+
+/* 在h1元素后面，且与h1元素同级的p元素 */
+h1 + p {
+    font-size: 200%;
+}
+
+/* 多重组合，body元素内部的h1元素后面紧跟着的p元素内部class为special的元素  */
+body h1 + p .special {
+    color: yellow;
+    background-color: black;
+    padding: 5px;
+}
+
+
+
+/* 根据不同的状态进行变化 */
+
+/* 未访问 */
+a:link {
+    color: pink;
+}
+/* 访问过 */
+a:visited {
+    color: green;
+}
+/* 鼠标悬停 */
+a:hover {
+    text-decoration: none;
+}
+
+/* 函数 */
+
+.outer {
+    border: 5px solid black;
+}
+/* 
+    calc() : 动态计算长度值
+        calc(90% - 30px) : 外容器长度的90% - 30px
+*/
+.inner {
+    padding: 10px;
+    width: calc(90% - 30px);
+    background-color: rebeccapurple;
+    color: white;
+}
+/* 
+    rotate() : 旋转操作
+*/
+.box {
+    margin: 30px;
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    transform: rotate(0.8turn)
+}
+
+
+/* 速记属性 : 可以在一行设置多个属性值，包括 font, background, padding, border, margin等
+    eg : padding: 10px 15px 15px 5px;
+    等价于 : 
+        padding-top: 10px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+        padding-left: 5px;
+*/

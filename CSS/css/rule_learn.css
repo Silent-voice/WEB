@@ -1,0 +1,21 @@
+/* 
+    规则
+*/
+
+
+/* @import : 引入其他样式表 */
+@import 'basic_learn.css';
+
+
+/* 
+    @media : 设定媒体查询条件，当条件成立时应用相应规则
+*/
+body {
+    background-color: pink;
+}
+/* 窗口大于30em时使用该规则 */
+@media (min-width: 30em) {
+    body {
+        background-color: blue;
+    }
+}

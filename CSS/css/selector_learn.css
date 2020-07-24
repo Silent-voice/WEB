@@ -3,8 +3,54 @@
 
 */
 
-/* 基本选择器 */
+/* 基本选择器
+        1. 元素选择器，eg: h1 { }
+        2. class选择器，eg: .className { }  p.className { }
+        3. id选择器，eg: #idName { }    div#idName { }
+        4. 属性选择器，根据元素中是否 存在某个属性/存在某个特定值的属性 决定是否适用该规则
+            a[title] { }
+            a[href="https://example.com"] { }
+            p[class~="special"] { }
+            div[lang|="zh"] { }  
+                [attr|=value] [attr^=value] 以value开头
+                [attr$=value]   以value结尾
+                [attr*=value]   包含value
+                [... i]     设置为大小写不敏感匹配，eg : li[class^="a" i]
+        5. 伪类 : 处于特定状态的元素
+            a:link { } 未被访问   a:visited { } 被访问过     
+            a:hover { } 鼠标悬停    :focus { } 焦点元素，被选择、点击等
+            p:first-child { }   第一个该类型的元素      :last-child     :only-child 没有任何兄弟元素    
+            input:invalid { }   未通过验证的元素，多用于突出显示错误
+        6. 伪元素 : 元素的部分而不是元素本身
+            p::first-line { }   
+
+            ::before和::after伪元素配合content属性使用，可以在匹配元素前后加上content的内容
+            eg : 
+                .box::before {content: "This should show before the other content."}  
+
+        7. 全局选择器 * ，代指所有元素
+            * { }
+*/
 
 
 
-/* 组合选择器 */
+
+
+/* 选择器的组合方式 
+    1. 多个选择器并集以 , 隔开
+        p, h1, .className { }
+    2. 多个选择器的交集
+        p:first-child::first-line { }   第一个p元素的第一行
+    3. 后代选择器，以空格分隔多个选择器
+        A B {}  A选择器匹配元素 的子元素或子子元素等 中符合B选择器的元素
+            body article p { }
+    4. 子代关系选择器
+        A > B {}  A选择器匹配元素 的直系子元素 中符合B选择器的元素
+            article > p { }
+    5. 邻接选择器
+        A + B {}    紧跟着 A选择器匹配元素，且符合B选择器的元素
+            p + img {}
+        A ~ B {}    B在A后面，不一定相邻
+
+
+*/

@@ -19,3 +19,10 @@ body {
         background-color: blue;
     }
 }
+
+
+/* 下载WEB字体，使得浏览器能够支持特殊字体 */
+@font-face {
+    font-family: "myFont";      /* 字体类型名 */
+    src: url("myFont.ttf");     /* 字体文件链接 */
+}

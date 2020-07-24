@@ -14,13 +14,25 @@
                 内联样式 > id选择器规则 > 类选择器规则 > 元素选择器规则
             4.3 在属性值后面加上 !important ，可以强制使得该属性值的优先级最高，多个!important则会按照原来的规则计算优先级。
                 eg : border: none !important;
-            
+        6. 一个id唯一标识一个元素；一个类可以对应多个元素，一个元素也可以对应一个类。
 
     CSS规则的应用
         1. 外部样式表 : 在HTML中通过 <link rel="stylesheet" href="css/basic_learn.css" type="text/css"> 调用
         2. 内部样式表 : 将CSS规则写在HTML文件的 <style></style> 元素内
         3. 内联样式 : 将CSS规则写在具体元素的style属性中 
 
+
+    通用属性值：CSS中所有属性都支持 initial inherit unset revert 这4种取值
+        initial : 使用该属性的默认值
+            1. CSS中每个属性都有一个最初的默认值，和代码无关。比如color的默认值是black
+            2. 默认值不等于从父元素继承的取值
+        inherit : 显示声明该属性的取值继承于其父元素
+            1. 如果父元素没有相关属性的定义，则会选择用户代理设置的相关属性的取值，依旧没有时会使用initial值
+        unset : 顾名思义，相当于不设置
+            1. 对于继承属性，等价于inherit; 对于非继承属性，等价于initial
+    
+    特殊属性：
+        all : 代指该元素的所有属性，常配合initial/inherit/unset这几个属性值使用，便于一次性设置子元素所有属性取值
 
 */
 

@@ -1,0 +1,43 @@
+/* 
+    盒模型
+        1. CSS中的盒子根据布局方式可以分为 块级盒子(block box) 和 内联盒子(inline box)
+        2. 块级盒子 : <h1> <p>
+            2.1 占用父容器的全部宽度
+            2.2 可以设置width和height属性
+            2.3 每个盒子都会换行
+            2.4 内边距(padding)、外边距(margin)和边(border)会将其他元素从当前盒子周围"推开"
+        3. 内联盒子 : <a> <span> <em> <strong>
+            3.1 盒子不会换行
+            3.2 width和height属性不起作用
+            3.3 垂直方向的内边距、外边距以及边框会被应用但是不会把其他处于inline状态的盒子推开；水平方向会。
+        4. display 属性能够改变元素/盒子的外部显示类型是块级还是内联，这将会改变它与布局中的其他元素的显示方式
+            4.1 inline  内联
+            4.2 block   块级
+            4.3 flex    盒子内部的直接子元素成为flex元素，根据弹性盒子规则进行布局
+            4.4 inline-flex     block-flex  外部布局是inline/block，内部布局是flex
+            4.5 inline-block    与block相比，只是不能跳转到新行，其他都相同
+        5. 标准盒模型与替代盒模型：针对的是块级盒子
+            5.1 浏览器默认使用标准盒模型，包括以下4部分
+                content box: 内容块，大小通过width, height相关属性设置
+                padding box: 内边距，包围在内容区域外部的空白区域,大小通过 padding 相关属性设置
+                border box : 边框，包围content和padding，大小通过 border 相关属性设置
+                margin box : 外边距，盒子与其他元素之间的空白区域，大小通过 margin 相关属性设置
+            5.2 替代盒模型
+                5.2.1 使用时需要设置属性 box-sizing: border-box;
+                5.2.2 替代盒模型的宽高是可见宽高，包含内容块和内边距
+                        width = content width + 2 * padding width;
+        6. 外边距、内边距、边框
+            6.1 外边距折叠：相邻元素的外边距采用较大的那个外边距，而不是两者相加
+                <p style="margin-bottom: 50px;"></p>
+                <p style="margin-top: 30px;"></p>
+                两者间距离为50px
+            6.2 边框样式 none/hidden、dotted  圆点、dashed  虚线、solid	实线、double  双实线
+                border-style: dashed;   Apply to all four sides
+                border-style: dotted solid;     horizontal | vertical
+                border-style: hidden double dashed;     top | horizontal | bottom
+                border-style: none solid dotted dashed;     top | right | bottom | left
+
+                border-radius 设置圆角
+
+*/
+

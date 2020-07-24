@@ -1,0 +1,64 @@
+/* 常用格式属性 */
+
+/* 
+    字体属性
+        color
+        font-family : 字体种类
+            font-family: "Trebuchet MS", Verdana, sans-serif;   可以提供一个字体栈，浏览器会依次进行尝试，选择支持的字体
+        font-size
+            px : 像素，绝对大小
+            em : 1em = 父元素设置的字体大小
+            rem : 1rem = 根元素(html)设置的字体大小
+        font-style  字体倾斜
+            normal  italic/oblique
+        font-weight 字体加粗
+            normal, bold
+            lighter, bolder     与父元素加粗字体比更细/粗
+        text-transform  字体转型
+            none     防止任何转型。
+            uppercase/lowercase     将所有文本转为大/小写
+            capitalize              转换所有单词让其首字母大写
+            full-width          将所有字形转换成全角，
+        text-decoration     文本划线
+            none    underline/overline  文本下/上划线       line-through    穿过文本的线
+        text-shadow     文本阴影
+        
+        text-align      文本对齐
+            left、right、center
+        
+        line-height     行间距，一般1.5~2之间
+        letter-spacing  字母间距     word-spacing   单词间距
+
+*/
+
+
+/* 
+    列表属性
+        list-style-type     列表的项目符号的类型
+            disc 实心圆点(默认值)   circle 空心圆点    square 实心方块    decimal 十进制阿拉伯数字
+        list-style-position     项目符号是出现在列表项内，还是出现在其外
+            outside(默认值)     inside
+        list-style-image        属性允许对于项目符号使用自定义图片
+            list-style-image: url(star.svg);
+
+        管理计数项属性
+            start="n"   列表编号从n开始
+            reversed    列表编号倒序
+            value       为某个列表项设置编号
+
+
+        <ol start="4" reversed>
+            <li>Toast pitta, leave to cool, then slice down the edge.</li>
+            <li>Fry the halloumi in a shallow, non-stick pan, until browned on both sides.</li>
+            <li>Wash and chop the salad.</li>
+            <li>Fill pitta with salad, humous, and fried halloumi.</li>
+        </ol>
+
+        <ol>
+            <li value="2">Toast pitta, leave to cool, then slice down the edge.</li>
+            <li value="4">Fry the halloumi in a shallow, non-stick pan, until browned on both sides.</li>
+            <li value="6">Wash and chop the salad.</li>
+            <li value="8">Fill pitta with salad, humous, and fried halloumi.</li>
+        </ol>
+
+*/

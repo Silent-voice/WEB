@@ -7,12 +7,37 @@
 @import 'basic_learn.css';
 
 
-/* 
-    @media : 设定媒体查询条件，当条件成立时应用相应规则
-*/
-body {
-    background-color: pink;
+
+
+/* 下载WEB字体，使得浏览器能够支持特殊字体 */
+@font-face {
+    font-family: "myFont";      /* 字体类型名 */
+    src: url("myFont.ttf");     /* 字体文件链接 */
 }
+
+
+
+/* 
+    媒介查询：广泛应用于响应式设计，允许运行一系列测试，选择性的应用CSS规则，使用媒介查询的位置叫做断点
+        1. 格式：media-type and (media-feature-rule)
+        2. 基本判断条件
+            宽高
+                width/height    等于
+                min-width/height    大于等于
+                max-width/height    小于等于
+            朝向
+                portrait    纵向
+                landscape   横向
+        3. 逻辑运算符
+            与 and;     或 , ;     非 not
+            @media screen and (min-width: 400px) and (orientation: landscape)
+            @media (min-width: 400px), (orientation: landscape)
+            @media not (all and (orientation: landscape))
+        
+*/
+
+
+
 /* 窗口大于30em时使用该规则 */
 @media (min-width: 30em) {
     body {
@@ -20,9 +45,22 @@ body {
     }
 }
 
+/* 
+    all 所有设备
+    screen 非打印模式
+    print   打印模式
 
-/* 下载WEB字体，使得浏览器能够支持特殊字体 */
-@font-face {
-    font-family: "myFont";      /* 字体类型名 */
-    src: url("myFont.ttf");     /* 字体文件链接 */
+
+*/
+@media screen and (min-width: 800px) { 
+    .container { 
+        margin: 1em 2em; 
+    } 
+} 
+
+
+
+/* 特性查询，判断浏览器是否支持某种特性 */
+@supports (display: grid) {
+    /* CSS代码 */
 }

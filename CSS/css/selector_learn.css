@@ -17,6 +17,7 @@
                 [attr*=value]   包含value
                 [... i]     设置为大小写不敏感匹配，eg : li[class^="a" i]
         5. 伪类 : 处于特定状态的元素
+            :scope 等价于 :root，指元素本身
             a:link { } 未被访问   a:visited { } 被访问过     
             a:hover { } 鼠标悬停    :focus { } 焦点元素，被选择、点击等
             p:first-child { }   第一个该类型的元素      :last-child     :only-child 没有任何兄弟元素    

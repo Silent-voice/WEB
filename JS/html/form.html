@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <title>My test page</title>
+
+        <style>
+            form {
+                /* 居中表单 */
+                margin: 0 auto;
+                width: 400px;
+                /* 显示表单的轮廓 */
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+            }
+
+
+            label {
+                /* 确保所有label大小相同并正确对齐 */
+                display: inline-block;
+                width: 150px;
+                text-align: right;
+            }
+
+            input, textarea {
+                /* 确保所有文本输入框字体相同
+                    textarea默认是等宽字体 */
+                font: 1em sans-serif;
+
+                /* 使所有文本输入框大小相同 */
+                width: 200px;
+                box-sizing: border-box;
+
+                /* 调整文本输入框的边框样式 */
+                border: 1px solid #999;
+            }
+
+            input:focus, textarea:focus {
+                /* 给激活的元素一点高亮效果 */
+                border-color: #000;
+            }
+
+            textarea {
+                /* 使多行文本输入框和它们的label正确对齐 */
+                vertical-align: top;
+
+                /* 给文本留下足够的空间 */
+                height: 5em;
+            }
+
+            .button {
+                /* 把按钮放到和文本输入框一样的位置 */
+                padding-left: 90px; /* 和label的大小一样 */
+            }
+
+            button {
+                /* 这个外边距的大小与label和文本输入框之间的间距差不多 */
+                margin-left: .5em;
+            }
+        </style>
+
+    </head>
+    <body>
+        <!-- 
+            form : 表单
+                1. 可以使用<section>、<fieldset>进行分块，使用<p><h><ul>进行展示
+                2. 表单发送时，只有具有name属性的控件才会被发送 
+                3. 属性
+                    action : 数据发送目标URL    #代表当前页面
+                    method : 请求方法
+                    enctype : 请求数据类型
+                        默认：application/x-www-form-urlencoded，表示已编码为URL参数的表单数据
+                        multipart/form-data : 数据分为多个部分，可以用来传文件
+
+            fieldset 
+                1. 用于对表单元素进行分组，对相同目的的表单元素划分到一个块中
+
+            legend
+                1. 用于描述了<fieldset>里所含有部件的用途
+
+            label : 标签
+                1. 对某个元素进行说明
+                2. 可以点击，会聚焦到绑定元素上
+                3. 表单元素可以放在<label></label>之间
+                4. 属性
+                    for : 将label元素绑定到某个表单元素上，值为绑定元素的id
+                    form : 该label所属表单id，这样可以将label放置在form之外
+
+
+
+            表单部件元素共有属性
+                1. autofocus(false)	指定当页面加载时该元素应该自动具有输入焦点
+                2. disabled(false)	元素不可用，用户不能与元素交互
+                3. form 与之相关联的表单元素
+                4. name 元素的名称，跟表单数据一起提交的
+                5. value 元素的初始值
+                6. id 唯一标识
+
+            input
+                1. 交互式控件，用于接受用户数据
+                2. 常用属性
+                    2.1 type : 指定该控件的类型
+                        text(默认)  button  file hidden   data    email   checkbox  search  ...
+                    2.2 readonly : 只读
+                    2.3 placeholder : 控件内容为空时显示的描述文本
+                    2.4 size : 控件初始大小
+
+
+            textarea : 多行文本框
+                1. 常用属性
+                    cols(20)、rows
+                    wrap(soft)  表单提交时，文本是否加上换行符
+
+            button
+                1. type类型
+                    submit : 提交表单
+                    reset : 重置表单项
+                    button : 不进行任何操作，后续通过JS代码绑定事件
+
+            select
+                1. 选择框
+                    multiple : 多选
+                2. option : 设置选项
+                    selected : 设置为默认选项
+                3. optgroup : 对选项进行分组
+                    label : 该分组的描述信息
+
+        -->
+
+        <form classmethod="post" enctype="multipart/form-data" id="form_1">
+            <h1>Payment form</h1>
+            <!-- abbr ：展示缩写，鼠标悬停时会显示title属性内容 -->
+            <p>Required fields are followed by <strong><abbr title="required">*</abbr></strong>.</p>
+            <section>
+                <h2>Contact information</h2>
+
+                <fieldset>
+                    <legend>Title</legend>
+                    <ul>
+                        <li>
+                            <label for="title_1">Ace</label>
+                            <input type="radio" id="title_1" name="title" value="A">
+                        </li>
+                        <li>
+                            <label for="title_2">King</label>
+                            <input type="radio" id="title_2" name="title" value="K" >
+                        </li>
+                        <li>
+                            <label for="title_3">Queen</label>
+                            <input type="radio" id="title_3" name="title" value="Q">
+                        </li>
+                    </ul>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>User info</legend>
+                    <p>
+                        <label for="name">
+                            <span>Name: </span>
+                            <strong><abbr title="required">*</abbr></strong>
+                        </label>
+                        <input type="text" id="name" name="username" value="ada">
+                    </p>
+    
+                    <p>
+                        <label for="mail">
+                            <span>E-mail: </span>
+                            <strong><abbr title="required">*</abbr></strong>
+                        </label>
+                        <input type="email" id="mail" name="usermail">
+                    </p>
+                    <p>
+                        <label for="pwd">
+                            <span>Password: </span>
+                            <strong><abbr title="required">*</abbr></strong>
+                        </label>
+                        <input type="password" id="pwd" name="password">
+                    </p>
+                </fieldset>
+                
+            </section>
+
+            <section>
+                <h2>Payment information</h2>
+                <p>
+                    <label for="card">
+                        <span>Card type:</span>
+                    </label>
+                    <select id="card" name="usercard">
+                        <option value="visa">Visa</option>
+                        <option value="mc">Mastercard</option>
+                        <option value="amex">American Express</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="number">
+                        <span>Card number:</span>
+                        <strong><abbr title="required">*</abbr></strong>
+                    </label>
+                    <input type="tel" id="number" name="cardnumber">
+                </p>
+                <p>
+                    <label for="date">
+                        <span>Expiration date:</span>
+                        <strong><abbr title="required">*</abbr></strong>
+                        <em>formatted as mm/dd/yyyy</em>
+                    </label>
+                    <input type="date" id="date" name="expiration">
+                </p>
+            </section>
+
+            <section>
+
+                <select id="groups" name="groups">
+                    <optgroup label="fruits">
+                        <option>Banana</option>
+                        <option selected>Cherry</option>
+                        <option>Lemon</option>
+                    </optgroup>
+                    <optgroup label="vegetables">
+                        <option>Carrot</option>
+                        <option>Eggplant</option>
+                        <option>Potato</option>
+                    </optgroup>
+                </select>
+
+                <select multiple id="multi" name="multi">
+                    <option>Banana</option>
+                    <option>Cherry</option>
+                    <option>Lemon</option>
+                </select>
+            </section>
+
+            <section>
+                <label for="file">Choose a file</label>
+                <input type="file" id="file" name="myFile">
+            </section>
+
+            <section>
+                <p> <button id="bt_1" type="submit">Validate the payment</button> </p>
+            </section>
+
+        </form>
+
+        <!-- 
+            表单校验：
+                1. 通过HTML属性进行校验
+                    required : 声明该输入需要校验后才能发送
+                    pattern : 校验正则表达式
+                2. JS校验
+                    2.1 可以自行设计校验处理代码
+                    2.2 使用校验API
+
+
+        -->
+
+        <form>
+            <label for="choose">Would you prefer a banana or a cherry?</label>
+            <input id="choose" name="i_like" required pattern="banana|cherry">
+            <button>Submit</button>
+        </form>
+
+
+
+        <script src="./../js/form_learn.js" type="text/javascript"></script>
+    </body>
+</html>

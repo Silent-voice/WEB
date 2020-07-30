@@ -17,10 +17,16 @@
                 1. JS中所有的数值都是Number，64位浮点数
                 2. 特殊值
                     NaN：Not a Number，无法计算
-                    Infinity : 无限大，超出范围
+                    Infinity : 无限大，超出范围，有正负
+                    0 : 无限小也会表示成0
                 let x1 = 17; let x2 = 34.00;  let x3 = 1.2345e3;
             
-            String、
+            String
+                1. 字符串本身不可变，只能访问，操作方法也是返回新的字符串
+                    s[0] = 'e';     错误
+                    delete s[0];    错误
+                2. JS内部使用Unicode编码，每个字符占用16位(2字节)
+
                 let dolphinGoodbye = 'So';
             
             Boolean
@@ -32,13 +38,13 @@
                 let myNumberArray = new Array(10,15,40);
 
 
-            Object
-                对象的键值必须是字符串
+            Object : 狭义的对象、数组、函数
+                1. 对象的键名(属性)必须是字符串，非字符串会被自动转换成字符串
+                2. 对象的键值可以是任何类型的数据
+
+
                 let dog = { name : 'Spot', breed : 'Dalmatian' };       
                 dog.name        dog['name']
-
-            typeof varName;    返回数据类型，结果是一个字符串
-                Array 的typeof返回值也是object
 
             undefined   未定义
                 任何变量都可以通过设置 let varName = undefined; 进行清空
@@ -48,9 +54,16 @@
                 用于清空对象，let person = null;  
                 数据类型为object
 
-            
             RegExp  正则表达式对象
 
+
+            typeof varName;    返回数据类型，结果是一个字符串
+                Array 的typeof返回值也是object
+
+    基本数据类型和对象(引用)类型的区别
+        1. 对象类型拥有属性和方法，基本数据类型只是指向内存中的值
+        2. 使用基本数据类型变量时，会用基本包装类Number()/String()/Boolean()进行包装，所以可以调用属性和方法
+        3. 使用完该包装即被销毁
 */
 
 /*
@@ -60,15 +73,37 @@
             === : 先比较数据类型是否相同，相同时再比较值是否相同
 
             NaN === NaN;    // false，NaN无法比较
-            1 / 3 === (1 - 2 / 3);  // false，浮点数计算误差
+            1 / 3 === (1 - 2 / 3);  // false，浮点数计算误差，小数比较有一定危险
             Math.abs(1 / 3 - (1 - 2 / 3)) < 0.0000001;      // true
 
 */
 
+/*
+    数据类型转换
+        1. 自动转换
+            变量本身数据类型是不确定的，但运算符是有数据类型要求，会自动转换运算子的数据类型
+        2. 强制转换
+            Number()、String()、Boolean()
+
+*/ 
 
 /*
-    字符串操作
-        1. 字符串本身不可变，只能访问，操作方法也是返回新的字符串
+    常用函数
+        parseInt(string[, radix])     
+            radix : 进制  
+            失败返回NaN
+        parseFloat(string)
+            失败返回NaN
+            自动过滤前导空白符，遇到无法解析字符停止
+        
+        isNaN()     
+            判断数值是否是NaN，不是数值会使用Number()转为数值再判断
+
+*/
+
+/*
+    字符串
+        
 */
 
 '\x41' == 'A';
@@ -78,7 +113,6 @@ let browserType = 'mozilla';
 console.log(browserType.length);
 
 browserType[0];
-// browserType[0] = 'e';    错误，无法修改某个字符
 
 // 子串开始下标查找，没有返回-1
 browserType.indexOf('zilla');
@@ -173,9 +207,12 @@ sequence.reverse()  // 反转数组
 
 /*
     对象
+        Object.keys(obj);   查看对象自身的所有可枚举属性
+        delete obj.p;       删除属性，只能删除自身属性，无法删除继承属性
+
+        for(key in obj)     遍历属性
 */
 
-// this : 当前代码运行的对象
 
 var person1 = {
     name : 'Chris',
@@ -213,55 +250,6 @@ if('toString' in person2){
 
 
 
-
-
-// 一般函数创建对象
-function createNewPerson(name) {
-    var obj = {};
-    obj.name = name;
-    obj.greeting = function () {
-        console.log('Hi! I\'m ' + this.name + '.');
-    }
-    return obj;
-}
-
-let person3 = createNewPerson('ttt');
-
-// 构造函数创建对象
-function Person_constructor(name) {
-    this.name = name;
-    this.greeting = function () {
-        console.log('Hi! I\'m ' + this.name + '.');
-    }
-}
-let person4 = new Person_constructor('ttt');
-
-// 通过类创建对象
-class Person {
-    // 构造方法
-    constructor(name) {
-        this.name = name;
-        this.greeting = function () {
-            console.log('Hi! I\'m ' + this.name + '.');
-        };
-    }
-}
-
-let person5 = new Person('ttt');
-
-// 借助Object()创建对象
-let person6 = new Object({
-    name : 'Chris',
-    age : 38,
-    greeting : function() {
-        console.log('Hi! I\'m ' + this.name + '.');
-    }
-});
-
-// 通过create()拷贝对象
-let person7 = Object.create(person6);
-
-
 /*
     Map()   Set()   ES6标准新增
 */
@@ -295,9 +283,10 @@ for (var x of m) { // 遍历Map
 }
 
 /*
+    in
+        判断一个对象是否具有某个属性，不区分该属性是对象自身的属性，还是继承的属性
     for ... in ...
-        用于遍历一个对象的所有属性
-        Array也是一个对象，所以可以遍历
+        循环中获得对象自身的属性
 */
 
 

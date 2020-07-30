@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hello World</title>
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        
+        <!-- babel语法转换插件，不能用于生产环境 -->
+        <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    </head>
+    <body>
+        <div id="root"></div>
+        <div id="root2"></div>
+        <div id="root3"></div>
+        <div id="root4"></div>
+        <div id="root5"></div>
+
+        <!-- 使用JSX的一种折中做法，加上type="text/babel" -->
+        <script type="text/babel">
+            /*
+                1. JSX {} 中可以使用任何有效的JS表达式
+            
+            */
+
+
+            let style = {
+                div_class : "div"
+            };
+
+            function formatName(user) {
+                return user.firstName + ' ' + user.lastName;
+            }
+            const user = {
+                firstName: 'Harper',
+                lastName: 'Perez'
+            };
+
+
+            let element = (
+                <div id="div_1" className={style.div_class}>
+                    <h1>Hello, {formatName(user)}!</h1>
+                </div>
+            );
+
+            ReactDOM.render(
+                element,
+                document.getElementById('root')
+            );
+
+            
+            class Clock extends React.Component {
+                constructor(props) {
+                    super(props);
+                    this.state = {
+                        date: new Date(),
+                        isToggleOn: true
+                    };
+
+                    /*
+                        将本组件的this绑定到响应函数handleClick()上，不然回调时handleClick()是无法调用this的
+                            
+                        或者这样写，会自动绑定
+                            onClick={(e) => this.handleClick(e)}
+                    */ 
+
+                    this.handleClick = this.handleClick.bind(this);
+                }
+                
+                // 挂载函数，当组件被一次被渲染时调用
+                componentDidMount() {
+                    // 创建一个计时器，每隔1s执行一次tick()函数
+                    this.timerID = setInterval(
+                        () => this.tick(),
+                        1000
+                    );
+                }
+                // 卸载函数，组件被删除时调用
+                componentWillUnmount() {
+                    // 清除计时器
+                    clearInterval(this.timerID);
+                }
+
+                tick() {
+                    this.setState({
+                        date: new Date()
+                    });
+                }
+
+                handleClick(e) {
+                    e.preventDefault();     // 取消默认行为
+                    this.setState({
+                        isToggleOn: !this.state.isToggleOn
+                    });
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <a href="#" onClick={this.handleClick}>{this.state.isToggleOn ? 'ON' : 'OFF'}</a>
+                            <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(
+                <Clock />,
+                document.getElementById('root2')
+            );
+
+
+            /*
+                条件渲染
+            */
+
+            function UserGreeting(props) {
+                return <h1>Welcome back!</h1>;
+            }
+
+            function GuestGreeting(props) {
+                return <h1>Please sign up.</h1>;
+            }
+            function Greeting(props) {
+                const isLoggedIn = props.isLoggedIn;
+                if (isLoggedIn) {
+                    return <UserGreeting />;
+                }
+                return <GuestGreeting />;
+            }
+
+            ReactDOM.render(
+                <Greeting isLoggedIn={false} />,
+                document.getElementById('root3')
+            );
+
+            
+            /*
+                列表
+                    1. 利用Array.map()可以同时渲染多个组件
+                key
+                    1. 使用数组生成多个组件时，用于标识每个组件，React根据key来比较渲染前后组件是否改变
+                    2. 在同一个数组内，key最好要独一无二，数组间不需要唯一。
+                    3. 默认是使用数组下标作为key，这种方式不推荐。
+                    4. key要在数组上下文中定义，而不是具体某个数组组件元素内定义
+                    5. key这个属性是传给React使用的，而不是渲染后的DOM元素中的属性
+
+            
+            */
+
+            function NumberList(props) {
+                const numbers = props.numbers;
+                const listItems = numbers.map((number) =>
+                    <li key={number.toString()}>
+                        {number}
+                    </li>
+                );
+                return (
+                    <ul>{listItems}</ul>
+                );
+            }
+
+            const numbers = [1, 2, 3, 4, 5];
+            ReactDOM.render(
+                <NumberList numbers={numbers} />,
+                document.getElementById('root4')
+            );
+
+
+        </script>
+    </body>
+</html>

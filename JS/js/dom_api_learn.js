@@ -6,6 +6,10 @@
         3. Document
             页面操作功能
 
+    DOM(Document Object Model)
+        1. JavaScript操作网页的接口
+        2. 将网页转为一个JavaScript对象，从而可以用脚本进行各种操作
+
 */ 
 
 /*
@@ -18,7 +22,7 @@
             2.1 继承于EventTarget接口
             2.2 各种类型的DOM API对象会继承于该接口，允许我们使用相似的方式对待这些不同类型的对象。
             2.3 常用属性和方法
-                Node.childNodes     Node.firstChild     Node.lastChild
+                Node.childNodes     Node.firstChild     Node.lastChild      Node.nextSibling    Node.previousSibling
                 Node.parentNode     Node.parentElement
                 Node.nodeName   Node.nodeType   Node.nodeValue  Node.ownerDocument  Node.textContent
 
@@ -50,9 +54,14 @@
                 HTMLCollection.item()   HTMLCollection.namedItem()
 
 
-        Node和Element的区别
-            1. DOM树中所有节点都是Node，包括很多类型，比如元素节点、文本节点、属性节点、注释节点等
-            2. Element是Node的子类，是可以拥有元素节点、文本节点、属性节点、注释节点的特殊节点
+        Node节点分为7类 : 
+            Document : 整个文档树的顶层节点
+            DocumentType : doctype标签（比如<!DOCTYPE html>）
+            Element : 网页的各种HTML标签（比如<body>、<a>等）
+            Attr : 网页元素的属性（比如class="right"）
+            Text : 标签之间或标签包含的文本
+            Comment : 注释
+            DocumentFragment : 文档的片段，可以理解成一个缩小版的DOM树
 
 
 */ 
@@ -127,3 +136,10 @@
             n.setAttribute('class', 'highlight');   // highlight是CSS文件中定义的一组样式 .highlight{...}
 
 */
+
+/*
+    事件绑定
+        1. 节点元素上绑定事件触发是，会传给处理函数一个Event对象参数，常用属性有
+            event.target    指向触发该事件的元素的引用
+
+*/ 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hello World</title>
+        <!-- crossorigin : 便于获取异域文件的错误信息 -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        
+        <!-- babel语法转换插件，不能用于生产环境 -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    </head>
+    <body>
+        <div id="root"></div>
+
+        
+        <!-- 使用JSX的一种折中做法，加上type="text/babel" -->
+        <script type="text/babel">
+
+            ReactDOM.render(
+                <h1>Hello, world!</h1>,
+                document.getElementById('root')
+            );
+        </script>
+
+        <!-- 放底部，防止HTML元素还未加载完就运行 -->
+        <script src="./../js/basic_learn.js"></script>
+    </body>
+</html>

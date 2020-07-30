@@ -40,8 +40,9 @@
 /* 选择器的组合方式 
     1. 多个选择器并集以 , 隔开
         p, h1, .className { }
-    2. 多个选择器的交集
+    2. 多个选择器的交集，连着写
         p:first-child::first-line { }   第一个p元素的第一行
+        .className1.className2 { }      同时属于这两个类的元素
     3. 后代选择器，以空格分隔多个选择器
         A B {}  A选择器匹配元素 的子元素或子子元素等 中符合B选择器的元素
             body article p { }

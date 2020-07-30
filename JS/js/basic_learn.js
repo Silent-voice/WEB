@@ -32,11 +32,26 @@
 /*
     函数
         1. 格式 function 函数名(参数列表){ 函数体 }
+        2. 没有return语句，返回undefined
+        3. arguments，函数内部内置变量，表示传给函数的参数，类似一个Array
+        4. 函数调用时参数传递个数不要求与定义个数相同
+        5. 参数传递
+            基本类型：值传递
+            对象：拷贝一份地址，将地址传进去，函数内外使用两个值相同的地址变量(与引用传递不同之处在于，引用传递不拷贝地址，函数内外使用同一个地址变量)
 
 */
 function myFunction() {
     alert('hello');
 }
+
+function foo(a, b, ...rest) {
+    console.log('a = ' + a);
+    console.log('b = ' + b);
+    console.log(rest);
+}
+
+foo(1, 2, 3, 4, 5);     // a = 1, b = 2, rest = [3, 4, 5]
+
 
 
 // 匿名函数，没有定义函数名
@@ -49,6 +64,45 @@ var myButton = document.querySelector('button');
 myButton.onclick = function() {
     alert('hello');
 }
+
+
+// 高阶函数：以函数作为参数
+
+function add(x, y, f) {
+    return f(x) + f(y);
+}
+
+let x = add(-5, 6, Math.abs);
+
+
+/*
+    Array特有的一些函数
+        map() : 调用指定函数对数组每个元素进行处理
+        reduce() : 把上次计算结果传给下次计算
+        filter() : 筛选，返回true的留下
+        sort() : 排序
+        every() : 判断数组的所有元素是否满足测试条件
+        find() : 查找符合条件的第一个元素，没有返回undefined
+        findIndex() : 查找符合条件的第一个元素的下标，没有返回-1
+        forEach() : 类似map()，但不返回
+*/
+
+function pow(x) {
+    return x * x;
+}
+let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let results = arr.map(pow);     // [1, 4, 9, ...]
+
+results = arr.reduce(function (x, y) {
+    return x + y;
+});
+
+results = arr.filter(function (x) {
+    return x % 2 !== 0;
+});     //[1,3,5,7,9]
+
+
+
 
 
 /*
@@ -112,3 +166,50 @@ function bgChange(e) {
 
 btn.addEventListener('click', bgChange);
 
+
+/*
+    原型链
+        1. JS中没有类的概念，每个对象都有一个原型链
+        2. 基本概念
+            构造函数 : 指定构造对象应该具有的属性和方法
+            函数原型对象 : 每个构造函数都对应着一个函数原型对象，该原型对象拥有构造函数指定的属性和方法
+            实例原型对象 : 使用构造函数创建的对象实例
+
+            原型对象 : 函数原型对象 + 实例原型对象
+
+            prototype : 构造函数的一个属性，指向一个函数原型对象
+            constructor : 函数原型对象的一个属性，指向一个构造函数
+            __proto__ : 原型对象的一个属性，指向原型链上父原型对象，默认情况下是其构造函数的函数原型对象；浏览器内部属性，不可用于编程
+        3. 样例介绍
+            一个构造函数 F
+            该构造函数的原型对象 F_P
+            使用构造函数F创建的对象实例F_O_1，F_O_2
+
+            F.prototype = F_P
+            F_P.constructor = F
+
+            F_O_1.__proto__ = F.prototype = F_P
+            F_O_2.__proto__ = F.prototype = F_P
+
+            F_P.__proto__ = Object_P
+            Object_P.__proto__ = null
+
+        4. 可以通过修改一个构造函数的prototype，改变实例原型对象.__proto__的指向
+            function F1(){}
+            function F2(){}
+            F2.prototype = new F1();
+            let f2 = new F2();
+
+            f2.__proto__ = F2.prototype = new F1()
+            new F1().__proto__= F1.prototype = F1_P
+            F1_P.__proto__ = Object_P
+
+        5. 原型链的最顶端是Object构造函数的函数原型对象Object_P ，Object_P.__proto__ = null
+        6. JS对象属性的搜索过程：
+            6.1 首先查看是否是对象自己的属性和方法
+            6.2 其次查看对象.__proto__，也就是对象的父原型有没有
+            6.3 依次在原型链中查询，直到Object对象
+
+
+
+*/ 

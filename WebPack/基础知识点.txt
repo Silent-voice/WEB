@@ -1,0 +1,91 @@
+WebPack的作用
+
+
+
+
+
+
+基本概念
+
+    Module
+        1. 模块，在webpack中一切皆模块，一个模块对应着一个文件
+
+    Chunk
+        1. 代码块，由多个模块组合而成，用于代码合并与分割
+
+    entry
+        1. 入口模块，webpack会将其作为构建其内部依赖图的起点
+            entry: './path/xxx.js'
+    output
+        1. 用于指定输出文件的位置信息
+        2. 
+            output: {
+                path: './path/dist',                    输出文件所在目录
+                filename: 'bundle.js'                   输出文件名
+            }
+    loader
+        1. 用于将非JS文件转换成webpack能够处理的模块
+        2. 定义在module.rules中，每种文件一条rule
+            module: {
+                rules: [
+                    { test: /\.txt$/, use: 'raw-loader' }
+                ]
+            }
+            test 字段用于指明转换哪种文件
+            use 字段用于指明使用哪种loader
+    
+    plugins
+        1.  插件，从打包优化和压缩，一直到重新定义环境中的变量
+
+            plugins: [
+                new HtmlWebpackPlugin({template: './src/index.html'})
+            ]
+
+
+    mode
+        1. 优化模式
+            development : 开发环境，能够支持webpack-dev-server的热更新功能
+            production : 生产环境，更轻量化
+
+    source map
+        1. 源码映射工具，将编译后的代码映射回原始源代码，便于查找错误，有多种映射选项
+            devtool: 'inline-source-map'
+
+
+命令行
+    本地安装，只在当前项目中生效
+        npm install webpack webpack-cli --save-dev    
+    全局安装
+        npm install webpack webpack-cli --global  
+
+
+常用loader
+    style-loader css-loader
+        1. 用于处理CSS文件
+    file-loader
+        1. 用于文件处理
+
+
+常用插件
+    html-webpack-plugin
+        1. 用于生成index.html，导入webpack生成的所有js文件
+        2. 有很多参数，用于指定初始index.html的内容和样式
+    html-webpack-template
+        1. 配合html-webpack-plugin使用，有更好的基础模板
+
+    clean-webpack-plugin
+        1. 清理插件，每次运行之后会把指定目录中用不到的文件清除
+
+开发工具
+    1. 帮助开发者在进行修改时自动编译代码，主要有三种
+    2. webpack's Watch Mode
+        2.1 检测依赖图中的所有文件，有修改就重新编译
+        2.2 命令行  webpack --watch
+    3. webpack-dev-server(最常用)
+        3.1 提供了一个简单的web服务器，能够实时重新加载重新编译后的文件
+        3.2 命令行  webpack-dev-server --open
+            同时在webpack.config.js中设置监控目录：
+                devServer: {
+                    contentBase: './dist'
+                },
+    4. webpack-dev-middleware

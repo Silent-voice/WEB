@@ -69,3 +69,8 @@ function resetGame() {
     lastResult.style.backgroundColor = 'white';
     randomNumber = Math.floor(Math.random() * 100) + 1;
 }
+
+
+
+let s = 'asd\dasd ad as=ds';
+console.log(s.replace(/[\s\=\\]/g, "\\$&"))

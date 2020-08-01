@@ -13,7 +13,7 @@
                 session Storage对象是临时的，浏览器关闭时数据就会丢失
             2.4 localStorage
                 与sessionStorage类似，不过local Storage对象具有持久性，浏览器关闭数据依旧存在
-
+        3. storage发生变化，会触发window对象的 storage 事件
         
 
 

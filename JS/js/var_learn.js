@@ -54,17 +54,53 @@
                 用于清空对象，let person = null;  
                 数据类型为object
 
-            RegExp  正则表达式对象
 
+    typeof v
+        1. 返回一个变量的基本类型，字符串
+            number、string、boolean、object、function、undefined
+        2. 无法判断具体是哪种引用，因为引用对象返回的都是object
 
-            typeof varName;    返回数据类型，结果是一个字符串
-                Array 的typeof返回值也是object
+    obj instanceof fun
+        1. 用于判断对象obj的原型链中是否有fun.prototype
+        2. 等价于 prototype.isPrototypeOf() 函数
+
+    Object.prototype.toString.call(v)
+        1. 返回变量的数据类型，比typeof更加具体
+            [object Null]   [object Number]   [object String]   [object Boolean]    [object Undefined]
+            [object Function]   [object Array]   [object Date]   [object Object]    [object RegExp]
+
 
     基本数据类型和对象(引用)类型的区别
         1. 对象类型拥有属性和方法，基本数据类型只是指向内存中的值
         2. 使用基本数据类型变量时，会用基本包装类Number()/String()/Boolean()进行包装，所以可以调用属性和方法
         3. 使用完该包装即被销毁
+
+    
+    var let const区别
+        var : 不能跨函数访问、可以跨块访问、可重复声明
+        let : 不能跨函数访问、不能跨块访问、不可重复声明
+        const : 不能跨函数访问、不能跨块访问、不可重复声明、声明时必须赋值、赋值之后不可修改
+
+
+
+
+
 */
+
+var obj = { foo: 123 };
+obj instanceof Object; // true
+
+Object.prototype.isPrototypeOf(obj);
+
+null instanceof Object; // false，instanceof对null、undefined失效
+
+
+// 可用于判断值的类型
+var d = new Date();
+d instanceof Date // true
+d instanceof Object // true
+
+
 
 /*
     运算符
@@ -140,7 +176,16 @@ var newJson = JSON.parse(myString);         // string -> json
 
 
 /*
-    数组操作
+    Array
+        改变自身的函数
+            push()  pop()   shift()     unshift()
+            sort()  reverse()
+            splice()
+
+        不改变自身，返回新数组/数据的函数
+            concat()    slice()
+            map() ...
+
 */
 
 let shopping = ['bread', 'milk', 'cheese', 'hummus', 'noodles'];
@@ -189,6 +234,8 @@ console.log(myArray);
 
 
 
+newArray = myArray.slice(0, 3);     //  提取子数组
+
 // splice(begin_index, n)   从下标begin_index开始，删除n个元素，返回被删除元素组成的数组
 myArray.splice(1, 1)
 
@@ -200,6 +247,31 @@ sequence.sort()     //会修改数组本身
 
 sequence.reverse()  // 反转数组
 
+/*
+    Array特有的一些函数
+        map() : 调用指定函数对数组每个元素进行处理
+        reduce() : 把上次计算结果传给下次计算
+        filter() : 筛选，返回true的留下
+        sort() : 排序
+        every() : 判断数组的所有元素是否满足测试条件
+        find() : 查找符合条件的第一个元素，没有返回undefined
+        findIndex() : 查找符合条件的第一个元素的下标，没有返回-1
+        forEach() : 类似map()，但不返回
+*/
+
+function pow(x) {
+    return x * x;
+}
+let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let results = arr.map(pow);     // [1, 4, 9, ...]
+
+results = arr.reduce(function (x, y) {
+    return x + y;
+});
+
+results = arr.filter(function (x) {
+    return x % 2 !== 0;
+});     //[1,3,5,7,9]
 
 
 
@@ -240,6 +312,7 @@ delete person1.name     // 删除不在对象中元素不会报错
 /*  
     判断字段是否存在
     in : 在对象或对象原型链的父类中
+        一般直接创建的对象 {} 都继承与Object.prototype，而Object.prototype没有属性，只有方法
     object.hasOwnProperty() : 对象自身拥有的属性
 
 */ 

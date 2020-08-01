@@ -1,24 +1,67 @@
 
 /* 
-    弹性盒子 ：display : flex
-        1. 一个盒子被设置为弹性盒子(flex容器)之后，其直接子元素都成为了flex items，会按照默认的flex属性进行排列
+    弹性盒子  : display : flex   inline-flex
+        参考链接 : https://www.runoob.com/w3cnote/flex-grammar.html
+
+        1. 一个盒子被设置为弹性盒子(flex容器)之后，其直接子元素都成为了项目(flex items)，会按照默认的flex属性进行排列
         2. flex items排列方向叫做主轴(main axis)，垂直主轴方向叫做交叉轴(cross axis)
-        2. 常见flex属性
-            flex-direction : flex items的排列方式
-                row(默认值) 排成一行        column  排成一列
+        3. 常见flex容器属性
+            flex-direction : 主轴方向，flex items的排列方式
+                row(默认值) 排成一行    row-reverse     从右向左排列
+                column  排成一列        column-reverse  从下向左排列
+
             flex-wrap : flex items单行显示还是多行显示
-                nowrap(默认值) 单行     wrap 多行
+                nowrap(默认值) 单行     
+                wrap    多行，第一行在上方
+                wrap-reverse    第一行在下方
+
             flex-flow = flex-direction flex-wrap   是后两者的缩写
                 flex-flow: row wrap;
 
+            justify-content : items在主轴上的对齐方式
+                flex-start(默认值) : 左对齐    flex-end : 右对齐
+                center : 居中
+                space-between : 两端对齐，项目之间的间隔都相等
+                space-around : 每个项目两侧的间隔相等，所以，项目之间的间隔比项目与边框的间隔大一倍
 
+            align-items : items在交叉轴上的对齐方式
+                flex-start : 上对齐   flex-end : 下对齐
+                center : 居中
+                baseline: 项目的第一行文字的基线对齐
+                stretch(默认值) : 如果项目未设置高度或设为auto，将占满整个容器的高度
+
+            align-content : 多行时设置每一行在交叉轴上的对齐方式
+
+        4. 项目(item)的属性
+            order
+                在容器中的排列次序，整数(可负)，越小排列越靠前
+            flex-grow
+                放大比例，默认为0，不放大
+                如果所有项目的flex-grow属性都为1，则它们将等分剩余空间
+                如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍
+            flex-shrink
+                缩小比例，默认为1，不缩小
+            flex-basis
+                项目占据主轴的空间，默认为auto。类似于width/height，可以设置为200px这样
+            flex
+                缩写，flex = flex-grow, flex-shrink, flex-basis
+            align-self
+                允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性
+                默认为auto，表示继承父元素的align-items属性
 */
 
 * {box-sizing: border-box;}
 
+div {
+    border-radius: 5px;
+    background-color: rgb(207,232,220);
+    padding: 1em;
+}
 
 .flex {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .flex > div {
@@ -26,6 +69,8 @@
     background-color: rgb(207,232,220);
     padding: 1em;
 }
+
+
 
 
 
@@ -44,6 +89,7 @@
 
 */
 
+
 .grip {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -56,6 +102,8 @@
     background-color: rgb(207,232,220);
     padding: 1em;
 }
+
+
 
 .box1 {
     grid-column: 2 / 4;
@@ -74,7 +122,12 @@
 
 
 /* 
-    浮动 : 其他元素环绕浮动元素
+    浮动 : 
+        1. 使元素脱离标准的文档流，后续元素依次递进，填补文档流的空缺
+        2. float元素之前如果是一个正常元素，则float元素的垂直位置不变，还在前一个元素后一行
+        3. float元素之前如果也是一个float元素，则float元素会紧跟着前一个元素，在同一行，同一行放不下在放下一行
+        4. float元素会覆盖下一个正常元素，但不会覆盖正常元素中的文本
+    
         none left right inherit
 */
 .float {
@@ -89,16 +142,22 @@
 
 
 /* 
-    定位：
-        相对定位 : 相对于元素在正常流中原本的位置
-        绝对定位 : 相对于根元素<html>的边缘
-        固定定位 : 相对于浏览器窗口的边缘位置
-        粘性定位 : 在视图中滚动，直到出现在了我们给它设定的相对于容器的位置，这时候它就会停止
+    position : 
+        static : 处于正常文档流中
+
+        absolute : 绝对定位，脱离正常文档流，以最近的已定位父元素(没有则是html)为参照点，使用left、top、right、bottom确定偏移量
+        fixed : 固定定位，脱离正常文档流，以浏览器窗口的边缘位置为参照点进行偏移
+
+        relative : 相对定位，不脱离正常文档流，以其在文档流中原始位置为参照点进行偏移
+        
+        sticky : 粘性定位，在视图中滚动，直到出现在了我们给它设定的相对于容器的位置，这时候它就会停止
+                    在 position:relative 与 position:fixed 定位之间切换
+
 
 */
 
 /* 相对定位 */
-.positioned {
+.positioned_relative {
     background: rgba(255,84,104,.3);
     border: 2px solid rgb(255,84,104);
 
@@ -107,19 +166,19 @@
     left: 30px;
 }
 /* 绝对定位 */
-.positioned {
+.positioned_absolute {
     position: absolute;
-    top: 30px;
+    top: 30px;          
     left: 30px;
 }
 /* 固定定位 */
-.positioned {
+.positioned_fixed {
     position: fixed;
     top: 30px;
     left: 30px;
 }
 /* 粘性定位 */
-.sticky {
+.positioned_sticky {
     background: rgba(255,84,104,.3);
     border: 2px solid rgb(255,84,104);
 
@@ -127,6 +186,14 @@
     top: 30px;
     left: 30px;
 }
+
+/*
+    BFC(Block Formatting Context)
+        1. 正常文档流之外的一个独立的渲染区域或者说是一个隔离的独立容器
+        2. 比如float、position(absolute，fixed)等就会将一个元素隔离成一个BFC，脱离正常文档流之外
+
+
+*/
 
 
 /* 
@@ -170,7 +237,7 @@ form p {
 }
 
 /* 
-    多列布局 ：把内容按列排序的方式，两种设置方式
+    多列布局  : 把内容按列排序的方式，两种设置方式
         column-count 设置多少列
         column-width 每一列的宽度，根据父容器宽度尽量设置多个列
 */

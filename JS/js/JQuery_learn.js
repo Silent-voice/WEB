@@ -5,7 +5,19 @@
             window.jQuery === jQuery === $
         3. JQuery的所有方法都返回一个JQuery变量，类似于element数组，拥有0~多个元素，不会是null
 
-
+    JQuery链式调用
+        1. 通过在对象上的方法最后加上return this，把对象再返回回来，对象就可以继续调用方法，实现链式操作
+            Obj().init().setFlag();
+            Obj.prototype = {  
+                init: function() {  
+                    ...  
+                    return this;  
+                },  
+                setFlag: function() {  
+                    ...  
+                    return this;  
+                }  
+            }  
 
 */ 
 
@@ -225,11 +237,54 @@ var jqxhr = $.ajax('/api/categories', {
 });
 
 // 发送 multipart/form-data 格式数据
-$.ajax({
+$.ajax(url, {
 	type: 'post',
-	url: 'url',
 	cache: false,
 	contentType: false,
 	processData: false, 
 	data: fromData, 
 });
+
+
+
+
+
+//url: string,  method: string,  data?: object,  timeout?: number,  success: function,  error: function
+function ajax1(args){
+    
+    let settings = {
+        cache: false,
+        type : args.method,
+        success : args.success,
+        error : args.error,
+        // contentType : args.contentType,
+    }
+
+    if(args.data){
+        settings.data = args.data;
+    }
+    if(args.timeout){
+        settings.timeout = args.timeout;
+    }
+
+    $.ajax(args.url, settings);
+}
+
+function ajax2(args){
+    
+    let xhr = new XMLHttpRequest();
+    xhr.open(args.method, args.url);
+    xhr.onload = args.success;
+    xhr.onerror = args.error;
+
+    
+    if(args.timeout){
+        xhr.timeout = args.timeout;
+    }
+
+    if(args.data){
+        xhr.send(args.data);
+    }else{
+        xhr.send();
+    }
+}

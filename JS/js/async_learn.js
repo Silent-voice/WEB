@@ -3,10 +3,30 @@
         同步任务：主线程阻塞等待任务执行完成
         异步任务，主线程继续执行后续任务，异步任务触发时，主线程再去执行
 
-    任务队列
-        1. 主线程有同步任务队列和异步任务队列
-        2. 同步任务队列执行完之后再不断轮询异步任务队列，执行准备好的异步任务
-        3. 任务队列清空，程序结束
+    异步任务又分为
+        宏任务
+            <script></script> 包围的代码块
+            setTimeout, setInterval
+        微任务
+            promise.then()
+            process.nextTick()
+    
+    
+    事件循环(EventLoop)
+        1. 主线程执行执行栈中任务
+            同步任务就阻塞执行
+            异步任务进行注册，放到子线程中处理，事件触发时放入任务队列
+        2. 主线程执行结束后，扫描任务队列，按照任务的种类进行排序(宏任务/微任务)，放入执行栈
+        3. 循环1,2
+
+
+    当任务队列中有多种任务时，按照下面的顺序执行
+        1. 执行宏任务队列中的第一个宏任务
+            执行过程中产生的宏任务和微任务分布放入宏任务队列和微任务队列
+        2. 执行微任务队列中所有的微任务
+            执行过程中产生的宏任务放入宏任务队列
+            执行过程中产生的微任务放入微任务队列，继续执行，直到微任务队列清空
+        3. 循环1,2
 
     异步编程
         1. JS默认是单线程运行，容易出现阻塞
@@ -57,28 +77,29 @@ loadAsset('./../medias/coffee.jpg', 'blob', displayImage);
 
 
 /*
-    Promises
-        1. promise 是一个对象，它代表了一个异步操作的最终完成或者失败后返回的结果，
-        2. 由于不确定该异步操作什么时候完成，所以promise一开始处于一种既不成功也不失败的中间状态pending
-        3. promise可以理解为一个函数返回的对象，可以绑定回调函数，不需要再将回调函数作为参数传进去
-        4. 在异步操作结束之后(成功或者失败)，绑定在promise上的回调函数会依次执行
-        5. 绑定在promise上的回调函数构成一个promise链，链上的回调函数都是等待前一个函数执行结束后再异步执行当前函数
-        6. promise的状态
+    Promise
+        1. Promise是一个代理对象，被代理的值在Promise对象创建时可能是未知的，它代表了一个异步操作的最终完成或者失败后返回的结果
+        2. Promise允许你为异步操作的成功和失败分别绑定相应的处理方法，不需要再将回调函数作为参数传进去
+        3. 在异步操作结束之后(成功或者失败)，绑定在Promise上的回调函数会依次执行
+        5. 绑定在Promise上的回调函数构成一个Promise链，链上的回调函数都是等待前一个函数执行结束后再异步执行当前函数
+        6. Promise的状态
             pending : 正在运行
             resolved : 运行结束
                 fullfilled : 运行成功，返回运行结果
                 rejected : 运行失败，返回一条错误信息
 
-    then(callback(arg))        then(arg => callback(arg))
+    then(onFulfilled[, onRejected])
         1. 为一个promise对象绑定回调函数，返回一个新的promise对象
-        2. 类似于事件监听，当promise完成时触发，但只会触发一次
+            onFulfilled      Promise状态为fullfilled时执行的回调函数
+            onRejected       Promise状态为rejected时执行的回调函数
+        2. 没有处理的promise对象会继续沿着Promise链交由下个then处理
         3. 当前then中callback的返回值会作为下个then中callback的参数
     
-    catch(callback(arg))    等价于 then(null => callback(arg))
-        1. 当抛出异常时，浏览器会在promise链上寻找下一个catch()执行回调函数
+    catch(onRejected) 
+        1. 接收一个状态为rejected的promise对象，并处理
         2. 也返回一个新的promise对象，后面可以继续promise链
 
-    finally(callback())
+    finally(onFinally)
         1. 不管前面的promise是fullfilled还是rejected都会执行，所以回调函数没有参数
         2. 返回值依然是一个promise，promise的内容将沿用上一个promise
 
@@ -161,6 +182,14 @@ Promise.all([coffee, tea, description]).then(values => {
 /*
     自定义promise
         new Promise( function(resolve, reject) {...})
+            resolve(value)
+                1. 返回一个promise对象，并将promise的状态改为fulfilled
+                2. 将任意类型的value作为promise的参数，后续回调函数会调用
+                3. 如果value是一个promise对象，则返回该promise对象
+
+            reject(reason) 
+                1. 返回一个promise对象，并将promise的状态改为rejected
+                2. 一般返回一个Error()对象
 */ 
 
 function timeoutPromise(message, interval) {
@@ -179,6 +208,8 @@ function timeoutPromise(message, interval) {
 
 };
 
+var a = timeoutPromise('hello', 2000);
+
 timeoutPromise('hello', 2000)
 .then((message) => {
     alert(message);
@@ -188,25 +219,14 @@ timeoutPromise('hello', 2000)
 });
 
 
-function promisifyRequest(request) {
-    return new Promise(function(resolve, reject) {
-        request.onsuccess = function() {
-            resolve(request.result);
-        };
-    
-        request.onerror = function() {
-            reject(request.error);
-        };
-    });
-}
-
 
 /*
     async
         1. 用于函数声明部分，将函数变为异步函数，将返回值转换成一个promise
     await
-        1. 用于异步函数内部，放在其他异步函数之前，将代码停止在改行，直到promise完成
-        2. await关键字使JavaScript运行时暂停于此行，允许其他代码在此期间执行，直到异步函数调用返回其结果
+        1. 用于async function内部，放在其他异步函数之前，将代码停止在改行，直到promise完成
+        2. 返回值是promise完成时的返回的参数，而不是promise对象
+        3. 注意暂停的是执行异步函数的子线程，而不是主线程
 
 */
 
@@ -219,26 +239,6 @@ async function myFetch() {
     image.src = objectURL;
     document.body.appendChild(image);
 }
-
-// 使用try{}catch(){} ，依旧可能会触发promise链中的catch()块
-async function myFetch2() {
-    try {
-        let response = await fetch('coffee.jpg');
-        let myBlob = await response.blob();
-
-        let objectURL = URL.createObjectURL(myBlob);
-        let image = document.createElement('img');
-        image.src = objectURL;
-        document.body.appendChild(image);
-    } catch(e) {
-        console.log(e);
-    }
-}
-
-myFetch()
-.catch(e => {
-    console.log('There has been a problem with your fetch operation: ' + e.message);
-});
 
 // async/await 与所有promise功能兼容
 
@@ -258,6 +258,34 @@ async function timeTest() {
     await timeoutPromise2;
     await timeoutPromise3;
 }
+
+
+/* 
+    异常捕捉
+        1. 在外面(主线程)是没法捕获promise内部发生的异常，因为这些异常发生在另外一个线程中
+        2. 所以 try{}catch(){} 只能在异步函数内才能生效
+
+*/
+let p = new Promise((resolve, reject) => {
+    try{
+        throw new Error('ttt');
+    }
+    catch(e){
+        reject(e);
+    }
+    
+})
+
+
+p.catch(err => {
+    console.log(err.message);
+})
+
+
+
+
+
+
 
 
 

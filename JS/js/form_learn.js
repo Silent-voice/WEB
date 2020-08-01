@@ -46,8 +46,20 @@
             2.4 application/json form支不支持？
 
     FormData
-        1. FormData提交时会将数据转换成multipart/form-data格式
-        2. 即使修改Request Header中的Content-type字段为其他类型，数据依旧是multipart/form-data格式，不会自动转换
+        1. 表单对象     键值对存储数据
+            var formdata = new FormData();      //空表单
+            var formdata = new FormData(form_dom);
+        2. 键名默认是表单元素的name属性，可以存储多对键名相同的 键值对
+        3. 常用方法
+            get(key)    获取第一个匹配到的键值
+            getAll(key) 返回一个数组，获取所有匹配到的键值
+            set(key, value)    append(key, value)    delete(key)    has(key)
+            keys()      values()    entries()
+            checkValidity()     // 触发表单定义的字段校验
+        
+        
+        4. FormData提交时会将数据转换成multipart/form-data格式
+            即使修改Request Header中的Content-type字段为其他类型，数据依旧是multipart/form-data格式，不会自动转换
 
 
 

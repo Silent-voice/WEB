@@ -66,6 +66,8 @@ let person6 = new Object({
 let person7 = Object.create(person6);
 
 
+
+
 /*
     this
         1. 指向一个对象，属性或方法 "当前" 所在对象
@@ -105,7 +107,7 @@ var a = {
 
 a.b.m() // undefined，this指向a.b对象
 
-var hello = a.b.m;
+var hello = a.b.m;      
 
 hello(); // undefined，this指向window，没有p属性
 
@@ -158,15 +160,23 @@ B= {
 }
 B.fun();    // 'B' 'A'
 
+
+
+
+
 /*
     this绑定方法
         1. func.call(obj, arg1, arg2, ...)
-            将func的this绑定到obj对象上，后面参数是func调用所需参数
+            1. 将func的this绑定到obj对象上，后面参数是func调用所需参数
+            2. 只是这次运行时this改变了，以后运行还是原来的this
         2. func.apply(obj, [arg1, arg2, ...])
             与call()作用相同，就是参数传递使用的是数组
+
+
         3. func.bind(obj, arg1, arg2, ...)
             1. 将函数体内的this绑定到obj对象上
             2. 将函数体内的其他参数也绑定到相应的arg1, arg2, ...上
+
             3. 每次运行都会产生一个新的匿名函数，所以不能直接用于监听事件上
                 element.addEventListener('click', func.bind(obj));  // 错误，这会导致监听事件无法删除
 
@@ -191,13 +201,13 @@ a.call(obj) // 456
 
 
 var d = new Date();
-d.getTime()     
+d.getTime();     
 
 var print = d.getTime;
-print()     // 出错，因为getTime()中调用的this对象从d变为了window
+print();     // 出错，因为getTime()中调用的this对象从d变为了window
 
 var print = d.getTime.bind(d);  //将getTime()中的this绑定到d上
-print()     // 正确
+print();     // 正确
 
 
 
@@ -243,3 +253,84 @@ class ColorPoint extends Point {
         return this.color + ' ' + super.toString(); // 调用父类的toString()
     }
 }
+
+
+
+
+
+/*
+    自行实现关键字
+*/
+
+/*
+    替代new的做法
+*/ 
+function f(){
+    this.name = 'asd';
+    this.greet = function(){
+        console.log(this.name);
+    };
+
+}
+
+let f_o_1 = new f();    // 使用new
+
+// 不用new
+let f_o_2 = {};     // 创建空对象
+f.call(f_o_2);      //将this绑定到f_o_2上  
+f_o_2.__proto__ = f.prototype   // 修改原型链
+
+
+
+/*
+    继承
+        1. 先调用父类构造函数
+        2. 修改子类构造函数的prototype
+        3. 修改子类构造函数的prototype的constructor
+
+    Object.assign(target, source)
+        将source对象中自身拥有的所有属性赋值给target对象，键名相同会进行覆盖
+
+*/
+
+function Father(value){
+    this.name = value;
+}
+
+function Child(value) {
+    Father.call(this, value);
+    this.prop = value;
+}
+
+
+// 克隆一个prototype对象，防止修改constructor影响到父类
+Child.prototype = Object.create(Father.prototype);
+Child.prototype.__proto__ = Father.prototype;
+Child.prototype.constructor = Child;
+
+
+var c = new Child('child');
+console.log(c.name);
+
+
+
+/*
+    模拟实现fn.call(obj,args)方法
+        思路：将fn作为obj的一个属性，这样调用obj.fn(args)时，this就指向obj
+
+*/
+
+function fn(){
+    console.log(this.name);
+}
+
+let obj = {name : "hhh"};
+
+// 通过Function.prototype添加一个新方法call_()
+Function.prototype.call_ = function (obj) {
+    obj.fn = this;      // 将fn绑定到obj的属性上，这里this指向fn()
+    obj.fn();           // 执行fn
+    delete obj.fn;      //删除新加属性，防止一直绑定
+};
+
+fn.call_(obj); 

@@ -36,7 +36,7 @@ BOM : Browser Object Model，浏览器对象模型，主要负责对浏览器进
                 height  width   availHeight   availWidth
                 colorDepth	pixelDepth
 
-        4. location对象
+        4. history对象
             4.1 用户在浏览器窗口中访问过的URL信息
             4.2 常用属性和方法
                 length  历史列表中的网址数

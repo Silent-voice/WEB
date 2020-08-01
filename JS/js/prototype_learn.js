@@ -71,60 +71,6 @@ cat2.color // 'white'
 
 
 
-/*
-    instanceof
-        1. 返回一个布尔值，表示对象是否为某个构造函数的实例
-        2. instanceof的原理是检查右边构造函数的prototype属性，是否在左边对象的原型链上
-        3. 等价于 prototype.isPrototypeOf() 函数
-*/ 
-
-var obj = { foo: 123 };
-obj instanceof Object; // true
-
-Object.prototype.isPrototypeOf(obj);
-
-null instanceof Object; // false，instanceof对null、undefined失效
-
-
-// 可用于判断值的类型
-var d = new Date();
-d instanceof Date // true
-d instanceof Object // true
-
-
-
-
-
-
-/*
-    继承
-        1. 先调用父类构造函数
-        2. 修改子类构造函数的prototype
-        3. 修改子类构造函数的prototype的constructor
-
-    Object.assign(target, source)
-        将source对象中自身拥有的所有属性赋值给target对象，键名相同会进行覆盖
-
-*/
-
-function Father(value){
-    this.name = value;
-}
-
-
-function Child(value) {
-    Father.call(this, value);
-    this.prop = value;
-}
-
-
-// 克隆一个prototype对象，防止修改constructor影响到父类
-Child.prototype = Object.create(Father.prototype);
-Child.prototype.constructor = Child;
-
-var c = new Child('child');
-console.log(c.name);
-
 
 // 多重继承
 function M1() {

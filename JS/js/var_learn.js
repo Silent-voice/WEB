@@ -1,7 +1,7 @@
 /*
     变量与数据类型
 
-    const : 常量，不易改变的值
+    const : 常量，赋值后不可修改
 
     let/var : 
         1. 变量，JS中变量可以是任何支持的数据类型
@@ -39,7 +39,7 @@
 
 
             Object : 狭义的对象、数组、函数
-                1. 对象的键名(属性)必须是字符串，非字符串会被自动转换成字符串
+                1. 对象的键名(属性)必须是字符串或者Symbol，非字符串会被自动转换成字符串
                 2. 对象的键值可以是任何类型的数据
 
 
@@ -52,8 +52,19 @@
 
             null    空值
                 用于清空对象，let person = null;  
-                数据类型为object
+                typeof 为object，但不是一个对象类型的数据，只是对早期设计的兼容
 
+            Symbol : ES6新增类型，表示唯一的数据
+                1. 基本数据类型，格式：Symbol([description])
+                    description : 对该数据的描述
+                2. 每个Symbol都是唯一的
+                    let id1 = Symbol("id");
+                    let id2 = Symbol("id");
+                    console.log((id1 == id2));  // false
+                3. 常用作key值，防止被其他代码误操作
+                4. 不会参与 for ... in ...的循环
+                5. 会有一个全局Symbol注册表，使用Symbol的描述作为key存储各个Symbol数据，以便获取
+                    Symbol.for(description);    // 从注册表中获取Symbol，没有就新创建一个
 
     typeof v
         1. 返回一个变量的基本类型，字符串
@@ -70,6 +81,24 @@
             [object Function]   [object Array]   [object Date]   [object Object]    [object RegExp]
 
 
+    
+    in
+        判断一个对象是否具有某个属性，不区分该属性是对象自身的属性，还是继承的属性
+        继承的属性指使用 __proto__ 指明的继承？
+    
+    for ... in ...
+        同 in ，遍历所有可枚举属性
+
+    for ... of ...
+        遍历一个可迭代集合
+
+    Object.keys()
+        只返回自身的属性
+
+    Object.prototype.hasOwnProperty.call(obj, field)
+        判断field属性是否是obj对象自身属性
+
+
     基本数据类型和对象(引用)类型的区别
         1. 对象类型拥有属性和方法，基本数据类型只是指向内存中的值
         2. 使用基本数据类型变量时，会用基本包装类Number()/String()/Boolean()进行包装，所以可以调用属性和方法
@@ -81,11 +110,33 @@
         let : 不能跨函数访问、不能跨块访问、不可重复声明
         const : 不能跨函数访问、不能跨块访问、不可重复声明、声明时必须赋值、赋值之后不可修改
 
+    
+
+    浅拷贝：Object.assign(dest, [src1, src2, src3...])
+        1. 将src对象中的属性拷贝到dset对象中，并返回新的对象；
+        2. 如果属性名重复，后面拷贝的会覆盖掉前面的
+        3. 如果原对象中属性也是个对象，只会拷贝该对象的引用，所以是浅拷贝
+            
+    深拷贝：JSON.parse(JSON.stringify(obj1))
+        1. 先序列化再反序列化
 
 
+        let user = {
+            name: "John",
+            sizes: {
+                height: 182,
+                width: 50
+            }
+        };
 
+        let clone = Object.assign({}, user);
+        console.log( user.sizes === clone.sizes );    // true
+
+        let obj2 = JSON.parse(JSON.stringify(user));
+        console.log( user.sizes === obj2.sizes );   // false
 
 */
+
 
 var obj = { foo: 123 };
 obj instanceof Object; // true
@@ -111,6 +162,10 @@ d instanceof Object // true
             NaN === NaN;    // false，NaN无法比较
             1 / 3 === (1 - 2 / 3);  // false，浮点数计算误差，小数比较有一定危险
             Math.abs(1 / 3 - (1 - 2 / 3)) < 0.0000001;      // true
+        2. 空值运算符 ??
+            x = a ?? b
+            等价于
+            x = (a !== null && a !== undefined) ? a : b;
 
 */
 
@@ -309,17 +364,7 @@ person2.child.greeting();
 // 删除字段
 delete person1.name     // 删除不在对象中元素不会报错
 
-/*  
-    判断字段是否存在
-    in : 在对象或对象原型链的父类中
-        一般直接创建的对象 {} 都继承与Object.prototype，而Object.prototype没有属性，只有方法
-    object.hasOwnProperty() : 对象自身拥有的属性
 
-*/ 
-
-if('toString' in person2){
-    console.log(person2.hasOwnProperty('toString'));
-}
 
 
 
@@ -355,12 +400,7 @@ for (var x of m) { // 遍历Map
     console.log(x[0] + '=' + x[1]);
 }
 
-/*
-    in
-        判断一个对象是否具有某个属性，不区分该属性是对象自身的属性，还是继承的属性
-    for ... in ...
-        循环中获得对象自身的属性
-*/
+
 
 
 

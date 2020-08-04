@@ -4,19 +4,22 @@
             <script> JS代码 </script>
         2. 外部JS
             <script src="xxx.js" type="text/javascript" async></script>
-                async : 异步执行，在加载剩余页面的同时执行JS脚本(默认行为)，适合脚本与页面相对独立的情况
-                defer : 延迟执行，等待页面加载介绍之后执行JS脚本
+                async : 异步执行，在加载剩余页面的同时加载和执行JS脚本(默认行为)，适合脚本与页面相对独立的情况
+                defer : 延迟执行，在加载剩余页面的同时加载脚本，但等待页面加载结束之后才执行JS脚本
         3. 内联JS，不建议使用
             在HTML代码中调用JS函数，如 <button onclick="xxx()"></button>
 
 
     JS调用顺序控制
         1. 通过事件触发脚本调用
+            
             DOMContentLoaded : DOM加载完成时触发，不包括样式表，图片，flash
+
             load : 页面上所有的DOM，样式表，脚本，图片，flash都已经加载完成时触发
                 document.addEventListener("DOMContentLoaded", function() {
                     . . .
                 });
+            
         2. 异步执行 async
             页面加载和脚本加载并行，无法控制顺序，如下例，三个脚本加载顺序不确定，容易出问题
                 <script async src="js/vendor/jquery.js"></script>
@@ -35,7 +38,9 @@
         1. 格式 function 函数名(参数列表){ 函数体 }
         2. 没有return语句，返回undefined
         3. arguments，函数内部内置变量，表示传给函数的参数，类似一个Array
-        4. 函数调用时参数传递个数不要求与定义个数相同，运行省略参数
+        4. 函数调用时参数传递个数不要求与定义个数相同
+                缺少参数时会将参数设置为 undefined
+                参数多时会直接忽略
         5. 参数传递
             基本类型：值传递
             对象：拷贝一份地址，将地址传进去，函数内外使用两个值相同的地址变量(与引用传递不同之处在于，引用传递不拷贝地址，函数内外使用同一个地址变量)
@@ -47,6 +52,11 @@
 */
 function myFunction() {
     alert('hello');
+}
+
+// 设置参数默认值
+function showMessage(from, text = "no text given") {
+    alert( from + ": " + text );
 }
 
 function foo(a, b, ...rest) {
@@ -86,97 +96,193 @@ let x = add(-5, 6, Math.abs);
 
 
 /*
+    箭头函数：ES6新增
+        1. 语法 : (arg1, arg2, ...argN) => expression
+        2. 与传统函数的区别
+            1. 箭头函数没有this，会从外部获得，即箭头函数内部的this是当前环境的上下文this
+            2. 没有this所以不能使用new
+            3. 没有arguments
+*/
+
+var obj = {
+    birth: 1990,
+    getAge: function () {
+        var b = this.birth;         // 1990
+        var fn = function () {
+            return new Date().getFullYear() - this.birth; // this指向window或undefined
+        };
+        return fn();
+    }
+};
+obj.getAge(); 
+
+
+var obj = {
+    birth: 1990,
+    getAge: function () {
+        var b = this.birth; // 1990
+        var fn = () => new Date().getFullYear() - this.birth; // this指向obj对象
+        return fn();
+    }
+};
+obj.getAge(); // 25
+
+
+
+
+
+
+
+
+/*
     作用域
         全局作用域
         局部作用域
             函数作用域
             块级作用域 : 使用 {} 包裹的代码块
 
-    闭包
+    词法环境
+        1. 每个代码块都有一个单独的词法环境
+            函数、{}、for/while/if
+        2. 内部代码块的词法环境可以引用外部代码块词法环境中的属性
+        3. 内部代码块引用的是外部代码块词法环境中的属性的最终值
+
+    闭包:
         1. 闭包是由函数以及声明该函数的词法环境组合而成的
-        2. 该环境包含了这个闭包创建时作用域内的任何局部变量
-        3. 多用于将函数与一些特定数据相绑定
-        4. 闭包在处理速度和内存消耗方面对脚本性能具有负面影响，非特殊情况不建议使用
+        2. 函数不仅能访问其词法环境中的所有属性，还能访问其创建时嵌套的外部词法环境中的所有属性
+        3. 本质上，函数实例对象拥有一个引用指向其   创建时  的外部语法环境
+        4. 因此，同一个父函数返回的多个闭包子函数之间是相互独立的，每个实例的子函数的语法环境和父函数的语法环境都是独立的
+    
 
 */ 
 
 
-// myFunc是对displayName()的一个实例引用，仍然维持了一个对它的词法环境(变量name存在于其中)的引用
-
-function makeFunc() {
-    var name = "Mozilla";
-    function displayName() {
-        alert(name);
+function f() {
+    let father_field = 'f';
+    return function() {
+        let child_field = 'c';
+        console.log(father_field + '_' + child_field);
     }
-    return displayName;
 }
 
-var myFunc = makeFunc();
-myFunc();
+let g = f();    // 词法环境链  {child_field : 'c'} => {father_field : 'f'}
+g();
 
 
-function makeAdder(x) {
-    return function(y) {
-        return x + y;
+
+let name = "John";
+function sayHi() {
+    console.log("Hi, " + name);
+}
+name = "Pete";
+
+sayHi();    // 在sayHi的外部语法环境中，name最终是"Pete"    词法环境链  {} => {name : 'Pete'}
+
+
+
+// 闭包实例的独立性
+function makeCounter() {
+    let count = 0;
+    return function() {
+        return count++;
     };
 }
 
-var add5 = makeAdder(5);
-var add10 = makeAdder(10);
+let counter = makeCounter();
+let counter2 = makeCounter();
 
-console.log(add5(2));  // 7
-console.log(add10(2)); // 12
+counter(); // 0
+counter(); // 1
+
+counter2(); // 0
+counter2(); // 1
 
 
-let xModule = (function (){
-    let x = 1;
-    let y = [1,2,3];
-    function add() {
-        x += 1;
-        y.push(4);
-        return x;
-    }
-    return { x, add };
-})();
-let xm = xModule;
-xm.x = 10;
-console.log(xm.x);  // 10
-console.log(xm.y);  // [1,2,3]
-console.log(xm.add());  // 2，闭包原理
-console.log(xm.x);   // 10
-console.log(xm.y);  // [1,2,3,4]    xm.y是y的一个拷贝，但都是引用(地址)，所以指向的是内存中相同的数据
+
+// 闭包的应用
+function sum(a) {
+    return function(b) {
+      return a + b; // 从外部词法环境获得 "a"
+    };
+}
+
+sum(1)(2); // 3
+
 
 
 
 /*
     错误使用案例，在循环中使用闭包
-        1. 3个闭包中的函数都绑定了变量item
-        2. onfocus是异步函数，执行时循环已经结束，所以3个闭包中指向的变量item已经是最后一个值 age 了，3个闭合函数的执行效果都是一样的
+        for(let i = 0; i < 10; i++)
+            callback(i);
+        
+        等价于
+        
+        let j = 0
+        for(j; i < 10; i++)
+            let i = j;
+            callback(i);
+
+        while/if 也一样
+        因为let无法跨块使用，所以for循环每次都是为callback()创建一个单独的i，位于其直接外部词法环境中声明的
 
     解决方案
-        1. 在套一层闭包函数，该闭包函数返回showHelp(help)的实例引用
-        2. 使用let定义item；该样例中闭包绑定到的是for循环内部的块级作用域，let变量无法跨块，所以每个闭包引用的都是自己块内的item变量
+        1. 使用let定义item
+        2. 再套一层
 */ 
 
-function showHelp(help) {
-    document.getElementById('help').innerHTML = help;
-}
+/*
+    
+        
+    因为var变量可以跨块使用，所以
+        for (var i = 0; i < 3; i++){}   等价于 var i = 0; for (i; i < 3; i++){}
+    
+    在外部作用域中，i的最终值为3，此时每个回调函数的语法调用链
+        {}  =>  {} => {var i = 3}       
+        本身 => for{} => print{}
+*/
 
-function setupHelp() {
-    var helpText = [
-        {'id': 'email', 'help': 'Your e-mail address'},
-        {'id': 'name', 'help': 'Your full name'},
-        {'id': 'age', 'help': 'Your age (you must be over 16)'}
-    ];
-
-    for (var i = 0; i < helpText.length; i++) {
-        var item = helpText[i];
-        document.getElementById(item.id).onfocus = function() {
-            showHelp(item.help);
-        }
+function print_1() {
+    for (var i = 0; i < 3; i++) {
+        setTimeout(function() {
+            console.log(i);
+        }, 1000);
     }
 }
-setupHelp();
+
+print_1();    // 3, 3, 3
+
+/*
+    因此let无法跨块使用，所以每个回调函数对应的let i都是唯一的
+    {}  =>  {let i = 1/2/3 } => {}
+*/
+
+function print_2() {
+    for (let i = 0; i < 3; i++) {
+        setTimeout(function() {
+            console.log(i);
+        }, 1000);
+    }
+}
+
+print_2();    // 1, 2, 3
+
+/*
+    我们手动将let i提高到print{}的词法环境
+    {}  =>  {} => {let i = 3 }
+*/
+function print_3() {
+    let i;
+    for (i = 0; i < 3; i++) {
+        setTimeout(function() {
+            console.log(i);
+        }, 1000);
+    }
+}
+
+print_2();   // 3, 3, 3
+
+
 
 
 

@@ -61,6 +61,12 @@
                 border-style: none solid dotted dashed;     top | right | bottom | left
 
                 border-radius 设置圆角
+            
+            6.3 padding设置
+                padding:10px 5px 15px 20px;     上、右、下、左
+                padding:10px 5px 15px;           上、右左、下
+                padding:10px 5px;               上下、右左
+                padding:10px;                   上下左右
 
 */
 

@@ -134,7 +134,16 @@
         2. element.setAttribute(name, value);
             n.setAttribute("color", "white");
             n.setAttribute('class', 'highlight');   // highlight是CSS文件中定义的一组样式 .highlight{...}
-
+        3. element.innerHTML 
+            1. 将元素中的HTML获取为字符串形式
+            2. 也可以使用字符串 替换 元素内的内容
+            document.body.innerHTML = 'The new BODY!';
+            document.body.innerHTML = '<b>test</b>';
+        4. element.outerHTML
+            1. 替换当前元素内容
+        5. node.data        node.nodeValue
+            1. 获取节点的内容
+            
 */
 
 /*

@@ -1,9 +1,24 @@
 /*
+    Cookie
+        1. 浏览器端存储于 document.cookie 对象上,是一个字符串， 以 ; 分隔 key=value
+        2. cookie的属性
+            name=value	键值对，可以设置要保存的 Key/Value
+            Domain	域名，默认是当前域名
+            maxAge	最大失效时间(毫秒)
+            secure	当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
+            Path	表示 cookie 影响到的路径。如果路径不能匹配时，浏览器则不发送这个Cookie
+            Expires	过期时间(秒)，在设置的某个时间点后该 Cookie 就会失效，如 expires=Money, 05-Dec-11 11:11:11 GMT
+            httpOnly	如果在COOKIE中设置了httpOnly属性，则通过程序(JS脚本)将无法读取到COOKIE信息，防止XSS攻击产生
+
+*/ 
+
+
+/*
     web storage
-        1. 用于存储和检索较小的、由名称和相应值组成的key/value数据项
+        1. 用于存储和检索较小的、由名称和相应值组成的key/value数据项，都是String
         2. 概念
             2.1 origin
-                源/域，协议+主机(IP/域名)+端口 确定一个源
+                源/域，协议+域名+端口 确定一个源
             2.2 Storage
                 具体的数据存储接口，提供了对 特定origin 下数据存储和管理功能，两个不同的网址对应不同的Storage
                 属性：Storage.length      数据个数

@@ -88,6 +88,22 @@ loadAsset('./../medias/coffee.jpg', 'blob', displayImage);
                 fullfilled : 运行成功，返回运行结果
                 rejected : 运行失败，返回一条错误信息
 
+    new Promise(executor);
+        当Promise被创建时，executor会自动执行，属于同步任务
+        最终返回一个promise对象，拥有以下属性
+            state : 最初是 pending ，然后在resolve被调用时变为fulfilled，或者在reject被调用时变为rejected
+            result : 最初是undefined，然后在resolve(value)被调用时变为value，或者在reject(error)被调用时变为error
+
+        new Promise( function(resolve, reject) {...})
+            resolve(value)
+                1. 返回一个promise对象，并将promise的状态改为fulfilled
+                2. 将任意类型的value作为promise的参数，后续回调函数会调用
+                3. 如果value是一个promise对象，则返回该promise对象
+
+            reject(error) 
+                1. 返回一个promise对象，并将promise的状态改为rejected
+                2. 一般返回一个Error()对象
+
     then(onFulfilled[, onRejected])
         1. 为一个promise对象绑定回调函数，返回一个新的promise对象
             onFulfilled      Promise状态为fullfilled时执行的回调函数
@@ -104,6 +120,34 @@ loadAsset('./../medias/coffee.jpg', 'blob', displayImage);
         2. 返回值依然是一个promise，promise的内容将沿用上一个promise
 
 */
+
+function timeoutPromise(message, interval) {
+    // 自定义promise
+    return new Promise((resolve, reject) => {
+        if (message === '' || typeof message !== 'string') {    
+            reject('Message is empty or not a string');     // 运行失败，返回错误信息
+        } else if (interval < 0 || typeof interval !== 'number') {
+            reject('Interval is negative or not a number');
+        } else {
+            setTimeout(function(){
+                resolve(message);       // 正常结束，返回message
+            }, interval);
+        }
+    });
+
+};
+
+var a = timeoutPromise('hello', 2000);
+
+timeoutPromise('hello', 2000)
+.then((message) => {
+    alert(message);
+})
+.catch(e => {
+    console.log('Error: ' + e);
+});
+
+
 
 // fetch HTTP请求的简写方法，返回一个promise对象
 fetch('./../medias/products.json')
@@ -179,44 +223,7 @@ Promise.all([coffee, tea, description]).then(values => {
 });
 
 
-/*
-    自定义promise
-        new Promise( function(resolve, reject) {...})
-            resolve(value)
-                1. 返回一个promise对象，并将promise的状态改为fulfilled
-                2. 将任意类型的value作为promise的参数，后续回调函数会调用
-                3. 如果value是一个promise对象，则返回该promise对象
 
-            reject(reason) 
-                1. 返回一个promise对象，并将promise的状态改为rejected
-                2. 一般返回一个Error()对象
-*/ 
-
-function timeoutPromise(message, interval) {
-    // 自定义promise
-    return new Promise((resolve, reject) => {
-        if (message === '' || typeof message !== 'string') {    
-            reject('Message is empty or not a string');     // 运行失败，返回错误信息
-        } else if (interval < 0 || typeof interval !== 'number') {
-            reject('Interval is negative or not a number');
-        } else {
-            setTimeout(function(){
-                resolve(message);       // 正常结束，返回message
-            }, interval);
-        }
-    });
-
-};
-
-var a = timeoutPromise('hello', 2000);
-
-timeoutPromise('hello', 2000)
-.then((message) => {
-    alert(message);
-})
-.catch(e => {
-    console.log('Error: ' + e);
-});
 
 
 
@@ -262,19 +269,12 @@ async function timeTest() {
 
 /* 
     异常捕捉
-        1. 在外面(主线程)是没法捕获promise内部发生的异常，因为这些异常发生在另外一个线程中
-        2. 所以 try{}catch(){} 只能在异步函数内才能生效
+        1. promise会隐式的捕捉异常，并将其作为reject()返回
 
 */
 let p = new Promise((resolve, reject) => {
-    try{
-        throw new Error('ttt');
-    }
-    catch(e){
-        reject(e);
-    }
-    
-})
+    throw new Error('ttt');
+});
 
 
 p.catch(err => {

@@ -9,7 +9,7 @@
             4. 执行构造函数代码
         4. 构造函数默认返回this对象，
             如果有return一个对象语句时，就返回return的对象
-            return非对象时，依旧返回this对象
+            如果return非对象时，依旧返回this对象
         5. 构造函数(使用new调用)内，new.target指向构造函数本身
             function f() {
                 console.log(new.target === f);
@@ -70,11 +70,10 @@ let person7 = Object.create(person6);
 
 /*
     this
-        1. 指向一个对象，属性或方法 "当前" 所在对象
-            作为构造函数时，函数内部的this指向创建的实例化对象；作为普通函数时，函数内部的this指向外部父对象(window)
+        1. 指向调用 该代码所在函数 的对象
+            没有显示的对象调用该函数时，this指向window，严格模式下this是undefined
         2. this的本质是用于指明当前代码的运行环境，也就是在内存中运行时，是由哪个对象调用的
         3. 不建议使用嵌套this
-            函数A内执行的函数B中的this，一般指向B所属对象
 */ 
 
 
@@ -105,7 +104,7 @@ var a = {
     }
 };
 
-a.b.m() // undefined，this指向a.b对象
+a.b.m(); // undefined，this指向a.b对象
 
 var hello = a.b.m;      
 
@@ -124,7 +123,7 @@ var o = {
     }
 }
 
-o.f1()
+o.f1();
 
 
 var o = {
@@ -138,7 +137,7 @@ var o = {
     }
 }
 
-o.f1()
+o.f1();
 
 
 //函数B内执行的函数A中的this，一般指向A所属对象
@@ -217,6 +216,9 @@ print();     // 正确
         1. Class是构造函数的另一种写法，属性、类型都和构造函数相同
         2. constructor()
             类构造函数，和以前的构造函数用法一样，没有return就是返回实例化对象本身
+        3. 
+            constructor()中使用this和static定义的属性是类的属性
+            而Class内部定义的其他函数，则作为  Class.prototype 的属性
 
 */
 
@@ -239,8 +241,12 @@ var p = new Point(1,2);
 p.toString();
 
 /*
-    1. 子类的本质是创建一个父类实例对象，然后向父类实例对象中添加新的属性和方法
-    2. 所以子类构造函数中this的使用必须在super()之后，等待构造父类实例对象
+    继承：extends
+        1. 进行以下三步操作
+            super()     //调用父类的构造方法，super()=FatherClass.constructor.call(this)
+            ChildClass.__poroto__ = FatherClass
+            ChildClass.prototype.__poroto__ = FatherClass.prototype
+        2. 所以子类能够继承父类的正常属性和静态属性
 
 */
 class ColorPoint extends Point {
@@ -320,17 +326,27 @@ console.log(c.name);
 
 */
 
-function fn(){
-    console.log(this.name);
+function fn(arg1, arg2, arg3){
+    console.log(this.name + arg1 + arg2 + arg3);
 }
 
 let obj = {name : "hhh"};
 
 // 通过Function.prototype添加一个新方法call_()
 Function.prototype.call_ = function (obj) {
+
+    // 获取参数
+    var args = [];
+    // 注意i从1开始，第一个参数是obj
+    for (var i = 1; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }; 
+
+
     obj.fn = this;      // 将fn绑定到obj的属性上，这里this指向fn()
-    obj.fn();           // 执行fn
+    // obj.fn();           
+    eval("obj.fn(" + args + ")");   // 使用eval()执行fn，这样才能传进去多个参数，会自动对数组参数进行处理
     delete obj.fn;      //删除新加属性，防止一直绑定
 };
 
-fn.call_(obj); 
+fn.call_(obj, 1, 2, 3); 

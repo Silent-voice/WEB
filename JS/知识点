@@ -1,0 +1,259 @@
+页面加载优化
+    1. 页面元素组成方面
+        1. 尽量选用轻元素(<a>)，加载渲染较快
+        2. 减少不必要的嵌套，降低元素数量
+    2. 元素样式
+        1. 减少不必要的样式，有的可以从父元素继承就不用重新设置
+    3. 资源方面
+        1. 资源缓存
+        2. 图片/资源压缩
+        3. 解析文档时并行加载
+    4. 文档渲染
+        1. 调整DOM操作位置，尽量放在一起，减少重排和重绘
+        2. 逻辑处理的JS尽量放在后面，事件绑定可以后加载
+
+    5. 网络方面
+        1. 减少重定向和跨源请求(减少DNS)
+        2. HTTP2
+            Header压缩
+            二进制传输、报文切片
+            多路复用
+
+
+SEO
+    1. Search English Optimization，搜索引擎优化
+    2. 搜索引擎工作过程
+        1. 爬虫：爬取与解析
+        2. 数据入库：加标签
+        3. 检索排序：根据关键词进行检索
+    3. 优化方向
+        1. 主动提交给搜索引擎
+        2. 页面可解析，才会被爬取分析：SSR
+        3. 增加T(title)D(description)K(keywords)，便于打上正确标签
+        4. 高质量URL链接
+        5. 从排序算法入手：关键词频率
+
+
+SSR
+    1. Server Side Render，服务端渲染
+    2. 页面的主要渲染工作交由服务器完成
+        1. 对提高SEO有帮助
+        2. 如果进入一个新页面，放在后端渲染能提高浏览器的展示速度，提高用户体验；之后的小操作则在前端渲染，这样更合理点。
+
+
+跨域
+    1. 同源策略
+        1. 源 : 协议 + 域名 + 端口
+            两个域名指向同一个IP也属于非同源
+            域名和指向的IP也属于非同源
+        2. 同源限制
+            数据无法访问 : Storage、IndexDB
+            元素无法操作 : DOM、JS
+            请求无法发送 : ajax
+    2. 跨域解决方案
+        1. JSONP
+            1. 利用<script></script>可以跨域请求脚本的功能
+            2. 使用 <script src="http://example.com?callback=func"></script>
+                callback : 指明客户端定义的一个函数的名称
+            3. 服务端返回字符串 "func({...})"
+                script请求到的字符串会作为JS代码立即执行，就会调用客户端的func()函数，并将数据作为参数传递进来
+
+            4. 样例
+                客户端：
+                    function addScriptTag(src) {
+                        var script = document.createElement('script');
+                        script.setAttribute('type', 'text/javascript');
+                        script.src = src;
+                        document.body.appendChild(script);
+                    }
+
+                    指明客户端函数名为foo
+                    window.onload = function () {
+                        addScriptTag('http://example.com/ip?callback=foo');
+                    }
+
+                    function foo(data) {
+                        console.log('Your public IP address is: ' + data.ip);
+                    };
+                服务端：
+                    返回字符串 "foo({'ip': '8.8.8.8'});"
+                    这样浏览器就会运行代码foo({'ip': '8.8.8.8'});
+            5. 缺点：只能实现GET
+
+
+        2. postMessage
+            1. 通过targetWindow.postMessage(message, targetOrigin)
+                targetWindow : 目标窗口对象，可通过window.open()获得
+                message : 发送数据
+                targetOrigin : 接收消息的源限制
+            2. 接收方通过绑定 message 监听事件可以接收处理该消息
+                window.addEventListener('message', callback(event));
+                event有3个属性
+                    data : 接收到的数据对象
+                    origin : 发送方的源信息
+                    source : 发送方window对象的引用
+            3. 样例
+                发送方：
+                var popup = window.open('http://bbb.com');
+                popup.postMessage('Hello World!', 'http://bbb.com');
+
+                接收方：
+                window.addEventListener('message', function (e) {
+                    console.log(e.data);
+                },false);
+            
+        3. 代理
+            1. 发送请求到同源服务器
+            2. 同源服务器访问异源服务器，获取数据
+            3. 同源服务器将数据返回给浏览器
+        
+        
+        4. WebSocket
+            1. 使用WebSocket通信协议，在头部字段中加入请求源字段Origin
+            2. 由服务器决定是否处理该请求
+
+        5. CORS 跨源资源分享（Cross-Origin Resource Sharing）
+            1. 请求划分
+                简单请求
+                    方法：HEAD、GET、POST
+                    头部字段：Accept、Accept-Language、Content-Language、Last-Event-ID
+                            Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain
+                非简单请求  
+
+            2. 简单请求
+                1. 浏览器直接发送，增加一个Origin头部字段
+                2. 服务器发送一个正常HTTP响应
+                3. 浏览器解析，如果有Access-Control-Allow-Origin字段，代表请求正常完成，否则抛出错误
+                    可选字段：
+                        Access-Control-Allow-Credentials : 默认为false，浏览器是否发送cookie字段
+                        Access-Control-Expose-Headers : 增加服务端返回的头部字段
+                    浏览器端需要设置withCredentials字段才能发送cookie
+                        var xhr = new XMLHttpRequest();
+                        xhr.withCredentials = true;
+
+                请求
+                    GET /cors HTTP/1.1
+                    Origin: http://api.bob.com
+                    ...
+                成功响应
+                    Access-Control-Allow-Origin: http://api.bob.com
+                    Access-Control-Allow-Credentials: true
+                    Access-Control-Expose-Headers: FooBar
+                    Content-Type: text/html; charset=utf-8
+                    ...
+                
+
+            3. 非简单请求
+                1. 浏览器先发送一个预检请求，判断源是否在服务器的许可名单之中，以及可以使用哪些HTTP方法和头信息字段
+                2. 成功之后再发送正常的HTTP请求，带上Origin字段
+
+
+                预检请求
+                    OPTIONS /cors HTTP/1.1                              预检请求是OPTIONS方法
+                    Origin: http://api.bob.com                          请求源
+                    Access-Control-Request-Method: PUT                  请求方法
+                    Access-Control-Request-Headers: X-Custom-Header     请求特殊头部字段
+                    Host: api.alice.com
+                    ...
+                成功预检响应
+                    HTTP/1.1 200 OK
+                    Date: Mon, 01 Dec 2008 01:15:39 GMT
+                    Server: Apache/2.0.61 (Unix)
+                    Access-Control-Allow-Origin: http://api.bob.com     服务端允许的源
+                    Access-Control-Allow-Methods: GET, POST, PUT        服务端允许的方法
+                    Access-Control-Allow-Headers: X-Custom-Header       服务端允许的特殊头部字段
+                    Access-Control-Allow-Credentials: true              服务端允许发送cookie
+                    Access-Control-Max-Age: 1728000                     本次预检请求的有效期
+                    ...
+                失败的预检响应
+                    OPTIONS http://api.bob.com HTTP/1.1
+                    Status: 200
+                    Access-Control-Allow-Origin: https://notyourdomain.com
+                    Access-Control-Allow-Method: POST
+
+                正常请求
+                    PUT /cors HTTP/1.1
+                    Origin: http://api.bob.com
+                    Host: api.alice.com
+                    ...
+                
+                正常响应
+                    Access-Control-Allow-Origin: http://api.bob.com
+                    Content-Type: text/html; charset=utf-8
+
+
+缓存位置    
+    1. 内存缓存(memory cache)、硬盘缓存(disk cache)
+    2. 浏览器会在js和图片等文件解析执行后直接存入内存缓存中，当刷新页面时只需直接从内存缓存中读取
+    3. 而css文件则会存入硬盘文件中，所以每次渲染页面都需要从硬盘读取缓存
+
+HTTP缓存
+    1. HTTP缓存一般只针对GET请求获取的资源，因为其他请求一般是用来更新数据
+    2. HTTP请求整体过程
+        1. 查询浏览器缓存，是否有待请求数据的缓存信息
+        没有 
+            1. 直接向服务端发生HTTP请求获取资源，更新浏览器缓存
+        有
+            1. 查询是否是强制缓存，并且数据是否有效
+            是
+                1. 直接从缓存中获取数据，返回状态码200
+            否
+                1. 开始协商缓存，向服务端发生协商缓存请求，判断缓存是否有效
+                是
+                    1. 缓存有效，返回状态码304，从浏览器缓存中读取数据
+                否
+                    2. 缓存无效，返回状态码200，重新发送HTTP请求获取数据，更新浏览器缓存
+
+                
+                
+    3. 强制缓存
+        1. 强制缓存主要通过头部字段Cache-Control控制数据的缓存情况，随着数据一起返回
+        2. Cache-Control主要取值，可以同时取多个值
+            public : 客户端和代理服务器都可缓存
+            private : 只有客户端可以缓存(默认值)
+            no-cache : 使用协商缓存
+            no-store : 不使用缓存
+            max-age=xxx : 缓存多少秒后失效
+        3. 旧版本使用Expires字段，取值为缓存到期具体时间，会被Cache-Control字段覆盖
+    
+    4. 协商缓存
+        1. 两种字段设置Last-Modified/If-Modified-Since，Etag/If-None-Match，后者优先级大于前者
+        2. Last-Modified/If-Modified-Since
+            1. 第一次请求数据时，服务端返回数据的最后修改时间Last-Modified
+            2. 第二次请求数据时，请求报文将数据的最后修改时间放入If-Modified-Since
+            3. 服务端判断数据是否依旧有效(未修改)，有效返回304，无效返回200
+        3. Etag/If-None-Match
+            1. 第一次请求数据时，服务端返回数据的唯一标识Etag
+            2. 第二次请求数据时，请求报文将数据的唯一标识放入If-None-Match
+            3. 服务端判断数据是否依旧有效，有效返回304，无效返回200
+
+
+常见攻击
+    1. XSS攻击  跨站脚本攻击
+        1. 利用网页漏洞，在网页中插入恶意脚本，当其他用户访问时就会在本地执行恶意脚本
+    2. sql注入
+        1. 利用表单验证漏洞，在表单项中使用SQL语句，伪装成用户登录(加上永真SQL语句)或者打印所有用户信息(SELECT)
+    3. DNS劫持
+        1. 攻击DNS服务器，修改路由表，将域名解析定位到恶意IP
+        2. 攻击路由器，将DNS请求发送到伪装DNS服务器，进而将域名解析定位到恶意IP
+    4. CSRF 跨站请求伪装(Cross Site Request Forgery)
+        1. 获取用户身份信息(cookie)，伪装成用户访问网站
+    5. 中间人攻击
+
+
+HTTP
+    请求报文
+        请求行 : 方法 URL 版本
+        头部字段 : key : value\r\n      一行一组数据
+        \r\n
+        请求体
+    响应报文
+        状态行 : 版本 状态码 原因短语
+        头部字段
+        响应体
+    
+    状态码
+        200 正常
+        300 重定向
+        400 请求错误
+        500 服务端错误

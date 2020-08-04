@@ -8,3 +8,14 @@ export function f() {
     console.log('fff');
     console.log(this);
 };
+
+
+// let o = {name : 'a'}
+// function f(){
+//     o.name = 'b';
+// }
+
+// module.exports = {
+//     obj : o,
+//     fun : f
+// }

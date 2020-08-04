@@ -14,8 +14,12 @@
         onfocus/onblur  聚焦/解除焦点
         onmouseover/onmouseout  鼠标移到上面/移开
 
+        oninput     文本框值发生任何变化时触发
+        onchange    文本框发生变化，失去焦点后触发
+        onpropertychange    同oninput，但是可以监听js代码导致的变化
 
-    addEventListener() 和 .event的区别
+
+    addEventListener() 和 .onevent的区别
         
         只有functionB被绑定到myElement.onclick上，functionA被覆盖
         myElement.onclick = functionA;

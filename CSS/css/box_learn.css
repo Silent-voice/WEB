@@ -17,7 +17,8 @@
             2. block   块级
             3. flex    盒子内部的直接子元素成为flex元素，根据弹性盒子规则进行布局；外部布局还是按照元素默认的block
             4. inline-flex     外部布局是inline，内部布局是flex
-            5. inline-block    与block相比，只是不能跳转到新行，其他都相同
+            5. inline-block    与block相比，只是不能跳转到新行，其他都相同，例如 <input>
+            6. none     隐藏元素，同时不会占用页面空间；visibility:hidden只能隐藏，但依旧会占用页面空间
 
 
 

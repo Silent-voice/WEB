@@ -19,6 +19,8 @@
                 }  
             }  
 
+    $.Deferred()    类似于  Promise()
+
 */ 
 
 /*
@@ -156,9 +158,16 @@ ul.append(function (index) {
                 ready : 当页面被载入并且DOM树完成初始化后触发
 
                 $(document).ready(func); === $(func);
-        4. 代码触发事件
-            jq.trigger('eventName')   ===  jq.event()
-            事件是绑定在用户行为上，一般代码修改是不会触发相应事件，需要调用特殊代码触发事件
+        4. 代码触发事件     jq.triggerHandler('eventName')和jq.trigger('eventName')
+            jq.triggerHandler('eventName')    
+                1. 只触发jq匹配的第一个元素的指定事件
+                2. 不会触发元素的默认行为，比如表单提交等
+                3. 返回事件处理函数的返回值，而不是JQuery对象
+                4. 触发的事件不会DOM树中冒泡，当前元素如果不能正确处理就不会发生任何事情
+            jq.trigger('eventName')
+                1. 会触发jq匹配的所有元素
+                2. 会触发事件的默认行为
+        
 
 */ 
 

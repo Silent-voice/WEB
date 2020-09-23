@@ -1,21 +1,17 @@
-export var firstName = 'Michael';
-var lastName = 'Jackson';
-var year = 1958;
-
-export {lastName, year };
-
-export function f() {
-    console.log('fff');
-    console.log(this);
+let name = 'test3';
+let d = {
+    name : 'test3'
 };
 
-
-// let o = {name : 'a'}
-// function f(){
-//     o.name = 'b';
-// }
-
-// module.exports = {
-//     obj : o,
-//     fun : f
-// }
+function printName(){
+    console.log(name);
+}
+function printFullName(firstName){
+    console.log(firstName + name);
+}
+module.exports = {
+    name : name,
+    d : d,
+    printName: printName,
+    printFullName: printFullName
+};

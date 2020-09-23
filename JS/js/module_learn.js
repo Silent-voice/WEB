@@ -21,7 +21,7 @@
         3. require(path)
             1. 读取一个js文件，返回返回该模块的exports对象
             2. 第一次加载某个模块时，Node会缓存该模块。以后再加载该模块，就直接从缓存取出该模块的module.exports属性。
-            3. require()返回的exports对象是对
+                即同一次运行时，多个模块加载的都是一个exports对象，他们之间会相互影响
 */ 
 
 // 模块定义 myModule.js
@@ -42,6 +42,47 @@ module.exports = {
 var helloModule = require('./myModule.js');
 console.log(helloModule.name);
 helloModule.printName();
+
+
+/*
+    模块间的相互影响
+*/ 
+// test3
+let name = 'test3';
+let d = {
+    name : 'test3'
+};
+module.exports = {
+    name : name,
+    d : d
+};
+
+//test2
+let t3_module = require('./test3');
+
+function f(){
+    console.log(t3_module.name);
+    console.log(t3_module.d.name);
+    t3_module.name = 'test2';
+    t3_module.d.name = 'test2';
+}
+module.exports = {
+    f : f
+};
+// test1
+let t3_module = require('./test3')
+
+console.log(t3_module.name);        // test3
+console.log(t3_module.d.name);      // test3
+t3_module.name = 'test1';
+t3_module.d.name = 'test1';
+
+
+let t1_module = require('./test2')
+t1_module.f();                      // test1    test1 
+
+console.log(t3_module.name);        // test2
+console.log(t3_module.d.name);      // test2
 
 
 

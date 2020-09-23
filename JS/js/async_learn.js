@@ -3,17 +3,18 @@
         同步任务：主线程阻塞等待任务执行完成
         异步任务，主线程继续执行后续任务，异步任务触发时，主线程再去执行
 
-    异步任务又分为
-        宏任务
-            <script></script> 包围的代码块
-            setTimeout, setInterval
-        微任务
-            promise.then()
-            process.nextTick()
+    宏任务
+        <script></script> 包围的代码块
+        JS文件代码
+        setTimeout, setInterval
+    微任务
+        promise.then()
+        process.nextTick()
+        async
     
     
     事件循环(EventLoop)
-        1. 主线程执行执行栈中任务
+        1. 主线程执行执行栈中任务(宏任务)
             同步任务就阻塞执行
             异步任务进行注册，放到子线程中处理，事件触发时放入任务队列
         2. 主线程执行结束后，扫描任务队列，按照任务的种类进行排序(宏任务/微任务)，放入执行栈
@@ -174,6 +175,12 @@ fetch('./../medias/products.json')
         1. 同时响应多个promise，所有promise都fullfilled时才会fullfilled，否则会rejected
         2. 多个promise的结果组合成一个数组，按照参数中promise的顺序排列
 
+    Promise.any(iterable)
+        1. 返回最先reslove的promise或者全都被reject时返回一个rejected的promise
+    
+    Promise.allSettled(iterable)
+        1. 所有promise都完成时返回一个promise，不管是fullfilled还是rejected
+        2. 返回一个结果对象数组，每个对象都有status属性(取值fulfilled或rejected)指明对应的输入promise是成功还是失败，成功时有value属性保存结果，失败有reason属性保存原因
 */
 
 // 返回一个promise
@@ -227,13 +234,18 @@ Promise.all([coffee, tea, description]).then(values => {
 
 
 
+
+
 /*
     async
-        1. 用于函数声明部分，将函数变为异步函数，将返回值转换成一个promise
+        1. 用于定义一个返回异步函数对象的函数，将返回值转换成一个promise对象
+        2. async声明的函数内部代码与new Promise(executor)里的executor一样，是同步代码块，无需等待
+
     await
-        1. 用于async function内部，放在其他异步函数之前，将代码停止在改行，直到promise完成
-        2. 返回值是promise完成时的返回的参数，而不是promise对象
-        3. 注意暂停的是执行异步函数的子线程，而不是主线程
+        1. 用于async function内部
+        2. 如果await右侧是同步代码，则正常执行
+        3. 如果await右侧是异步函数(Promise实例)，则等待异步函数执行到Promise.resolve()并将返回值赋给左侧变量
+            同时，await下面的代码将会放入.then()中执行，也就是放入异步微任务队列
 
 */
 
@@ -252,7 +264,7 @@ async function myFetch() {
 let values = await Promise.all([coffee, tea, description]);
 
 /*
-    await阻塞改进
+    await阻塞改进？？？
         1. 将promise对象存储与变量中，可以通过await同时启动多个异步函数，而不需要阻塞等待一个个执行
 */
 async function timeTest() {
@@ -341,3 +353,55 @@ function step(timestamp) {
 
 let rAF = requestAnimationFrame(step);
 cancelAnimationFrame(rAF);
+
+
+/*
+    promise实现setTimeout()函数
+*/ 
+
+function promiseTimeout(f, t){
+
+    new Promise((resolve, reject) => resolve())
+    .then(() => {
+        let begin_time = new Date().getTime();
+        while(true){
+            if(new Date().getTime() - begin_time >= t){
+                break;
+            }
+        }
+        f();
+
+    });
+}
+
+
+/*
+    promise实现Promise.all
+        1. 确保返回一个Promise对象
+        2. 确保返回结果的有序性
+        3. 确保最后一个promise(不一定是列表中最后一个)完成时或者有rejected时，返回结果
+
+*/ 
+function PromiseAll(promise_list){
+    return new Promise((reslove, reject) => {
+        // 0 pendding  1 fullfilled     2 rejected
+        let finished_num = 0;
+        let res_list = new Array(promise_list.length);
+
+        for(let i = 0; i < promise_list.length; i++){
+            // 确保返回结果的有效性
+            promise_list[i].then(value => {
+                res_list[i] = value;
+                finished_num += 1;
+                if(finished_num == promise_list.length){
+                    resolve(res_list);
+                }
+            })
+            .catch(err => {
+                reject(err);
+            });
+        }
+
+    });
+
+}

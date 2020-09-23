@@ -38,7 +38,7 @@
         5. 原型链的最顶端是Object构造函数的函数原型对象Object.prototype，再往上Object.prototype.__proto__ = null
         6. JS对象属性的搜索过程：
             6.1 首先查看是否是对象自己的属性和方法
-            6.2 其次查看对象.__proto__，也就是对象的父原型有没有
+            6.2 其次查看对象 .__proto__ (注意不是prototype)，也就是对象的父原型有没有
             6.3 依次在原型链中查询，直到Object对象
 
 

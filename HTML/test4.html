@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>菜鸟教程(runoob.com)</title>
+        <script>
+            function displayResult(){
+                let radio_list = document.querySelectorAll("input[type='radio']");
+                let res;
+                for(let radio of radio_list){
+                    if(radio.checked){
+                        res = radio.id;
+                        break;
+                    }
+                }
+                alert(res);
+            }
+
+            function f(){
+                alert(this.name);
+            }
+        </script>
+    </head>
+    <body>
+
+        <form>
+            你更喜欢哪种颜色?<br>
+        <input type="radio" name="colors" id="red" onclick="f()">红色<br>
+            <input type="radio" name="colors" id="blue" onclick="f()">蓝色<br>
+            <input type="radio" name="colors" id="green" onclick="f()">绿色
+        </form>
+        <button type="button" onclick="displayResult()">显示 input 类型</button>
+
+    </body>
+</html>

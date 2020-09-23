@@ -1,4 +1,27 @@
 /* 常用格式属性 */
+/* 
+    单位
+        相对单位
+            %
+            em : 父元素设置的字体大小
+            rem : 根元素(html)设置的字体大小
+        绝对单位
+            px : 像素
+            cm mm in : 厘米 毫米 英寸
+    移动端适合使用相对单位，便于适配多种型号
+
+    元素尺寸小数问题
+        1. 元素在文档流中占有的具体尺寸仍是原来的小数，但渲染出来的展示尺寸是四舍五入后的整数尺寸
+        2. 渲染时舍去的尺寸增加到后一个元素上，渲染时增加的尺寸从后一个元素中扣除
+
+        比如一堆0.8px的元素
+        第一个元素：实际尺寸0.8，渲染尺寸1，从后一个元素扣除0.2
+        第二个元素：实际尺寸0.8(-0.2)，渲染尺寸1，从后一个元素扣除0.4
+        第三个元素：实际尺寸0.8(-0.4)，渲染尺寸0，向后一个元素增加0.4
+        第四个元素：实际尺寸0.8(+0.4)，渲染尺寸1，向后一个元素增加0.2
+        。。。
+
+*/
 
 /* 
     字体属性
@@ -62,3 +85,65 @@
         </ol>
 
 */
+
+/* 
+    元素水平居中
+        1. margin: auto;    margin:0 auto;       自动计算外边距，必须设置width属性才能生效
+        2. text-align: center;      设置元素内文本水平居中  
+
+
+    
+    元素垂直居中
+        1. padding: xpx 0;  这样块内元素上下内边距都是xpx，达到垂直居中的效果
+
+
+    垂直水平居中
+        1. 使用内外边距实现
+            margin:0 auto;      自动计算外边距，水平居中，必须设置width属性才能生效
+            使用position，然后计算元素所属位置
+        2. 设置父元素为flex
+            display : flex;
+            justify-content : center;
+            align-items : center;
+
+*/
+
+
+/* 
+    动画
+        1. 使元素从一种样式逐渐变化为另一种样式的效果
+        2. 用百分比来规定变化发生的时间，或用关键词 "from" 和 "to"，等同于 0% 和 100%
+        3. 关键字
+            @keyframes : 创建动画
+            animation : 动画属性的简写
+                animation-name : 选择动画名称
+                animation-duration : 动画持续时间
+                ...
+*/
+
+
+@keyframes myfirst1
+{
+    from {background: red;}
+    to {background: yellow;}
+}
+
+@keyframes myfirst2
+{
+    0%   {background: red; left:0px; top:0px;}
+    25%  {background: yellow; left:200px; top:0px;}
+    50%  {background: blue; left:200px; top:200px;}
+    75%  {background: green; left:0px; top:200px;}
+    100% {background: red; left:0px; top:0px;}
+}
+
+
+/* 选择动画，并设置动画总时间 */
+div {
+    animation: myfirst1 5s;     
+}
+
+div {
+    animation-name: myfirst;
+    animation-duration: 5s;   
+}

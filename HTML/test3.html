@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <input type="text" name="searchBox" class="sb" placeholder="enter and search">
+
+
+        <script>
+
+            function searchBoxInput(event){
+                console.log(event.target.value);
+            }
+
+            function searchBoxChange(event){
+                alert(event.target.value);
+                event.target.value += " propertychange happen";
+            }
+
+            let searchBox = document.querySelector("input.sb");
+            searchBox.addEventListener("input", searchBoxInput);        // 文本发生变化就触发
+            searchBox.addEventListener("change", searchBoxChange);      // 文本发送变化且文本框失去焦点时触发
+
+            // searchBox.addEventListener("propertychange", searchBoxInput);   // 同input，不过能够监听到JS代码导致的文本框变化时间
+
+        </script>
+    </body>
+</html>

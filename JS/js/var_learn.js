@@ -16,7 +16,7 @@
             Number
                 1. JS中所有的数值都是Number，64位浮点数
                 2. 特殊值
-                    NaN：Not a Number，无法计算
+                    NaN：Not a Number，无法计算，==和===不能进行比较，可用isNaN()判断
                     Infinity : 无限大，超出范围，有正负
                     0 : 无限小也会表示成0
                 let x1 = 17; let x2 = 34.00;  let x3 = 1.2345e3;
@@ -84,21 +84,24 @@
     
     in
         判断一个对象是否具有某个属性，不区分该属性是对象自身的属性，还是继承的属性
-        继承的属性指使用 __proto__ 指明的继承？
+        继承的属性指使用 __proto__ 指明的继承
     
     for ... in ...
         同 in ，遍历所有可枚举属性
+        遍历数组的话返回的是数组的下标
 
     for ... of ...
-        遍历一个可迭代集合
+        遍历一个可迭代集合中的元素，包括Array Map Set
 
-    Object.keys()
+    Object.keys(obj)
         只返回自身的属性
 
     Object.prototype.hasOwnProperty.call(obj, field)
         判断field属性是否是obj对象自身属性
 
 
+    变量存储于栈中，引用存储于堆中
+    
     基本数据类型和对象(引用)类型的区别
         1. 对象类型拥有属性和方法，基本数据类型只是指向内存中的值
         2. 使用基本数据类型变量时，会用基本包装类Number()/String()/Boolean()进行包装，所以可以调用属性和方法
@@ -108,9 +111,15 @@
     var let const区别
         var : 不能跨函数访问、可以跨块访问、可重复声明
         let : 不能跨函数访问、不能跨块访问、不可重复声明
-        const : 不能跨函数访问、不能跨块访问、不可重复声明、声明时必须赋值、赋值之后不可修改
+        const : 不能跨函数访问、不能跨块访问、不可重复声明
+                声明时必须赋值、赋值之后不可修改
+                不可修改指的是变量指向的内存值，如果该内存值是一个引用，可以修改其引用对象的内容
 
     
+
+    深浅拷贝的区别
+        浅拷贝：仅仅拷贝了引用，指向的内存值相同
+        深拷贝：在内存中重新分配空间，重新生成引用
 
     浅拷贝：Object.assign(dest, [src1, src2, src3...])
         1. 将src对象中的属性拷贝到dset对象中，并返回新的对象；
@@ -150,6 +159,37 @@ null instanceof Object; // false，instanceof对null、undefined失效
 var d = new Date();
 d instanceof Date // true
 d instanceof Object // true
+
+/*
+    深拷贝的实现
+        1. 对Array和对象进行递归拷贝
+        2. 对于Function对象，重新执行定义语句，不过name属性会不同，而且无法修改
+        3. Function对象无法深拷贝，因为不能拷贝闭包引用
+*/ 
+function deepCopy(obj){
+    let new_obj;
+    if(obj instanceof Object){
+        if(Array.isArray(obj)){
+            new_obj = [];
+            for(v of obj){
+                new_obj.push(deepCopy(v));
+            }
+        }else if(obj instanceof Function){
+            eval("new_obj = " + obj.toString());
+            new_obj.name = obj.name;
+        
+        }else{
+            new_obj = {};
+            for(key of Object.keys(obj)){
+                new_obj[key] = deepCopy(obj[key]);
+            }
+        }
+    }else{
+        new_obj = obj;
+    }
+    return new_obj;
+}
+
 
 
 
@@ -194,11 +234,17 @@ d instanceof Object // true
 
 /*
     字符串
-        
+        indexOf()
+        slice()     substring()
+        replace()
+        trim()  trimStart()     trimEnd()
 */
 
 '\x41' == 'A';
 '\u4e2d\u6587' == '中文';
+
+'c'.charCodeAt();   // 字符转10进制数
+String.fromCodePoint(97);   // 10进制数转字符
 
 let browserType = 'mozilla';
 console.log(browserType.length);
@@ -220,14 +266,7 @@ console.log(browserType);
 browserType = browserType.replace('moz','van');
 
 
-/*
-    JSON  
-        1. 字符串必须得用双引号
-        2. 对于一个对象，可以自定义toJSON方法，调用stringify就会对指定结构的JSON数据进行序列化
-*/
-var myJSON = { "name" : "Chris", "age" : "38" };
-var myString = JSON.stringify(myJSON);      // json -> string
-var newJson = JSON.parse(myString);         // string -> json
+
 
 
 /*
@@ -297,7 +336,7 @@ myArray.splice(1, 1)
 delete myArray[0];      // 此时 myArray[0] = undefined，数据没了，位置还在
 
 
-// 排序
+// 排序，会将数据转为字符串，然后是按照ASCII顺序排序
 sequence.sort()     //会修改数组本身
 
 sequence.reverse()  // 反转数组
@@ -329,6 +368,24 @@ results = arr.filter(function (x) {
 });     //[1,3,5,7,9]
 
 
+/*
+    实现reduce
+*/ 
+Array.prototype.newReduce = function(fn){
+    if(this.length == 0){
+        return fn(null, null);
+    }else if(this.length == 1){
+        return fn(this[0], null);
+    }else{
+        let cur_sum = this[0];
+        for(let i = 1; i < this.length; i ++){
+            cur_sum = fn(cur_sum, this[i]);
+        }
+        return cur_sum;
+    }
+    
+
+}
 
 
 
@@ -336,8 +393,6 @@ results = arr.filter(function (x) {
     对象
         Object.keys(obj);   查看对象自身的所有可枚举属性
         delete obj.p;       删除属性，只能删除自身属性，无法删除继承属性
-
-        for(key in obj)     遍历属性
 */
 
 
@@ -401,8 +456,24 @@ for (var x of m) { // 遍历Map
 }
 
 
-
-
+/*
+    JSON
+        1. JSON对象是一个值，可以是数组、对象、基本数据类型
+        2. 数据格式要求
+            1. 值不能是函数、正则表达式对象、日期对象
+            2. 键名必须是字符串，字符串必须得用双引号
+            3. 原始类型的值只有四种：字符串、数值（必须以十进制表示）、布尔值和null（不能使用NaN, Infinity, -Infinity和undefined）
+            4. 数组或对象最后一个成员的后面，不能加逗号
+        3. 常用函数
+            JSON.stringify()
+                1. 将一个JSON值转换成一个JSON字符串
+                2. 自定义对象的toJSON方法，调用stringify就会将toJSON()的返回值作为输入参数进行转换
+            JSON.parse()
+                1. 将一个JSON字符串转换成一个JSON值
+*/ 
+var myJSON = { "name" : "Chris", "age" : "38" };
+var myString = JSON.stringify(myJSON);      // json -> string
+var newJson = JSON.parse(myString);         // string -> json
 
 
 /*

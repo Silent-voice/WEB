@@ -1,4 +1,13 @@
 /*
+    AJAX
+        1. 在用户和服务器之间加了一个中间层(AJAX引擎)，使得用户操作与服务器响应异步化
+        2. 用户请求由AJAX引擎处理和筛选，只有必要的才发给服务器，进行交互
+
+
+*/ 
+
+
+/*
     XMLHttpRequest(XHR)
         1. 继承于EventTarget，用于与服务器进行交互。
         2. XMLHttpRequest对象常用属性
@@ -69,11 +78,24 @@ function updateDisplay_xhr(verse) {
 
 /*
     Fetch
-        1. 配合Promise使用，提供了对请求的简单封装，让代码更易读
+        1. 提供了对请求的简单封装，让代码更易读，返回一个promise对象
         2. fetch(url[, init])
             init : 配置对象，可以配置请求具体的参数
             返回值：promise对象
+        3. 使用promise链绑定后续的处理函数，不需要使用监听事件绑定
+        4. 400,500返回的依旧是resolve，只有网络故障或者请求被拒绝才会返回reject
+        5. 返回的数据是一个Response对象，常见属性如下
+            Response.headers    头部字段对象
+            Response.status     状态码      Response.statusText     
+            Response.ok     boolean，表示状态码在200~299
+            Response.type       Response.body
+            Response.url
 
+            Response.clone()    创建一个 Response 对象的克隆
+            Response.error()    返回一个绑定了网络错误的新的Response对象
+
+            Response实现了Body接口，可以对数据进行处理，返回不同格式
+            Body.text()     Body.json()     Body.formData()     Body.blob()     Body.arrayBuffer()
 */
 
 

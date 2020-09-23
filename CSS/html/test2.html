@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
- <style>
-     div{
-         height: 0;
-         width: 0;
-         border-width: 50px;
-         border-style: solid;
-         border-color:  transparent #ff0 transparent transparent;
-         border-radius: 50%;
-     }
- </style>
+<style>
+    
+</style>
 <body>
-    <div></div>
+    <div style="display: flex;">
+        <div style="flex-grow: 1;">
+            <p>label1</p>
+            <p>label2</p>
+        </div>
+        <div style="flex-grow: 3;">
+            <div style="background-color: aqua;">
+                <textarea rows="10"></textarea>
+            </div>
+            <div style="background-color: aqua; display: none;">
+                <textarea rows="10"></textarea>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -62,7 +62,11 @@ let person6 = new Object({
     }
 });
 
-// 通过create()拷贝对象
+/*
+    通过create(obj)拷贝对象，本质是创建一个空对象，使其__proto__指向原对象
+        new_obj = {}
+        new_obj.__proto__ = obj
+*/ 
 let person7 = Object.create(person6);
 
 
@@ -140,27 +144,6 @@ var o = {
 o.f1();
 
 
-//函数B内执行的函数A中的this，一般指向A所属对象
-A = {
-    name : 'A',
-    fun : function(){
-        console.log(this.name);
-    }
-
-}
-
-B= {
-    name : 'B',
-    fun : function(){
-        console.log(this.name);
-        A.fun();
-    }
-
-}
-B.fun();    // 'B' 'A'
-
-
-
 
 
 /*
@@ -217,16 +200,42 @@ print();     // 正确
         2. constructor()
             类构造函数，和以前的构造函数用法一样，没有return就是返回实例化对象本身
         3. 
-            constructor()中使用this和static定义的属性是类的属性
+            constructor()中使用this定义的是类实例化对象的属性
+            static定义的是类的属性
             而Class内部定义的其他函数，则作为  Class.prototype 的属性
+        4. 静态方法/属性
+            1. 属于类本身的属性，可以直接使用 类名. 调用
+            2. 不是Class.prototype 的属性，因此类的实例化对象不能调用该方法，因为不在其原型链上
+            3. 可以被子类继承，子类.__proto__ = 父类 ，这样就继承了父类里的静态属性
+        5. 私有属性和方法
+            1. 在属性和方法前加上 #
+            2. 私有属性也是实例对象的属性，只是外部无法直接访问
 
 */
 
 
 class Point {
+
+    #s = 1;
+    get s() {
+        return this.#s;
+    }
+    set s(value) {
+        this.#s = +value;
+    }
+    #f(){
+        console.log(this.#s);
+    }
+
+
+    static z = 1;
+
+    // 实例属性可以在constructor()内部使用this指定，也可以直接在外部定义
+    count = 0;  // 实例属性，等同于this.count;
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.#s = x;
     }
 
     toString() {
@@ -297,6 +306,13 @@ f_o_2.__proto__ = f.prototype   // 修改原型链
     Object.assign(target, source)
         将source对象中自身拥有的所有属性赋值给target对象，键名相同会进行覆盖
 
+    Object.create = function(obj){
+        var F = Function (){};
+        F.prototype = obj;
+        return new F();
+    }
+
+
 */
 
 function Father(value){
@@ -313,6 +329,8 @@ function Child(value) {
 Child.prototype = Object.create(Father.prototype);
 Child.prototype.__proto__ = Father.prototype;
 Child.prototype.constructor = Child;
+
+Child.__proto__ = Father
 
 
 var c = new Child('child');
@@ -336,9 +354,9 @@ let obj = {name : "hhh"};
 Function.prototype.call_ = function (obj) {
 
     // 获取参数
-    var args = [];
+    let args = [];
     // 注意i从1开始，第一个参数是obj
-    for (var i = 1; i < arguments.length; i++) {
+    for (let i = 1; i < arguments.length; i++) {
         args.push(arguments[i]);
     }; 
 

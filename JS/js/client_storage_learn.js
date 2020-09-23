@@ -1,14 +1,20 @@
 /*
     Cookie
         1. 浏览器端存储于 document.cookie 对象上,是一个字符串， 以 ; 分隔 key=value
-        2. cookie的属性
-            name=value	键值对，可以设置要保存的 Key/Value
-            Domain	域名，默认是当前域名
+        2. cookie的属性，数据和属性都是以分号;分隔
+            name=value	键值对，可以设置要保存的 Key/Value 数据
+
+            domain	域名，默认是当前域名    ;domain=domain
             maxAge	最大失效时间(毫秒)
             secure	当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
             Path	表示 cookie 影响到的路径。如果路径不能匹配时，浏览器则不发送这个Cookie
             Expires	过期时间(秒)，在设置的某个时间点后该 Cookie 就会失效，如 expires=Money, 05-Dec-11 11:11:11 GMT
-            httpOnly	如果在COOKIE中设置了httpOnly属性，则通过程序(JS脚本)将无法读取到COOKIE信息，防止XSS攻击产生
+            httpOnly	如果在COOKIE中设置了httpOnly属性，则通过程序(JS脚本)将无法读取到COOKIE信息
+
+
+    Session
+        1. 服务器端使用的一种记录客户端状态的机制，保存在服务器上
+        2. 相当于用户档案
 
 */ 
 
@@ -24,15 +30,30 @@
                 属性：Storage.length      数据个数
                 方法：Storage.getItem()   Storage.setItem()   Storage.removeItem()    Storage.clear()
             2.3 sessionStorage
-                提供了对 特定origin 下的session Storage对象的访问功能
-                session Storage对象是临时的，浏览器关闭时数据就会丢失
+                1. 提供了对 特定origin 下的session Storage对象的访问功能
+                2. session Storage对象是临时的，浏览器关闭时数据就会丢失
+                3. 即使是同一个页面，不同的浏览器窗口也没法共享session Storage
             2.4 localStorage
-                与sessionStorage类似，不过local Storage对象具有持久性，浏览器关闭数据依旧存在
+                1. 与sessionStorage类似，不过local Storage对象具有持久性，浏览器关闭数据依旧存在
+                2. 在所有同源窗口中都是共享的
         3. storage发生变化，会触发window对象的 storage 事件
         
 
 
 */
+
+
+/*
+    Storage与Cookie的区别
+        1. cookie是在http请求中携带，在客户端和服务器之间来回传输；
+            storage存储在本地
+        2. 数据大小不同，cookie不能超过4k
+        3. 数据有效期不同
+            cookie失效前都有效；sessionStorage某个窗口存活期间；localStorage长时间有效
+        4. 数据作用域不同
+            cookie同源下所有页面；sessionStorage单一页面；localStorage同源下所有页面
+
+*/ 
 
 
 sessionStorage.setItem('myCat', 'Tom');

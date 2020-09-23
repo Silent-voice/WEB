@@ -129,6 +129,10 @@ div {
         4. float元素会覆盖下一个正常元素，但不会覆盖正常元素中的文本
     
         none left right inherit
+
+    清除浮动：clear : none left right both
+        1. 设置元素的左侧/右侧不能拥有浮动元素
+        2. 可以控制元素换行，不和其他浮动元素在同一行
 */
 .float {
     float: left;
@@ -190,7 +194,11 @@ div {
 /*
     BFC(Block Formatting Context)
         1. 正常文档流之外的一个独立的渲染区域或者说是一个隔离的独立容器
-        2. 比如float、position(absolute，fixed)等就会将一个元素隔离成一个BFC，脱离正常文档流之外
+        2. 比如float、position(absolute，fixed)等就会将一个元素及其子元素隔离成一个BFC，脱离正常文档流之外
+        3. BFC有一些规则
+            1. 块级元素垂直排列、外边距折叠
+            2. float元素与BFC不会重叠
+            3. BFC的宽高会计算浮动元素，正常文档元素是不计算的
 
 
 */

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+        <style>
+            /* 三角形 
+                1. 在没有宽高的情况下，border的4条边都会变成三角形
+            */
+            div.triangle{
+                height: 0;
+                width: 0;
+                border-width: 50px;
+                border-style: solid;
+                border-color:  transparent #ff0 transparent transparent;    /*  transparent 透明色*/
+            }
+
+            /* 扇形
+            
+            */
+            div.sector{
+                height: 0;
+                width: 0;
+                border-width: 50px;
+                border-style: solid;
+                border-color:  transparent #ff0 transparent transparent;
+                border-radius: 50%;     /*圆角*/
+            }
+
+
+
+        </style>
+    <body>
+        <div class="triangle"></div>
+        <div class="sector"></div>
+    </body>
+</html>
